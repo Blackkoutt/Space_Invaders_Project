@@ -7,4 +7,20 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Assets\background.jpg" />
+    <None Remove="Assets\barrier_green.png" />
+    <None Remove="Assets\barrier_orange.png" />
+    <None Remove="Assets\barrier_red.png" />
+    <None Remove="Assets\player.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\background.jpg" />
+    <Resource Include="Assets\barrier_green.png" />
+    <Resource Include="Assets\barrier_orange.png" />
+    <Resource Include="Assets\barrier_red.png" />
+    <Resource Include="Assets\player.png" />
+  </ItemGroup>
+
 </Project>
