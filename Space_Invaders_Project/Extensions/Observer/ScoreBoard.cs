@@ -7,13 +7,18 @@ namespace Space_Invaders_Project.Extensions.Observer
         public ScoreBoard() { } 
         public void Update(string name, int score, int position)
         {
+            string[] nicks = HighScores.Nicks;
+            int[] scores = HighScores.Scores;
+
             for (int i = 8; i >= position; i--)
             {
-                HighScores.nicks[i+1] = HighScores.nicks[i];
-                HighScores.scores[i+1] = HighScores.scores[i];
+                nicks[i+1] = nicks[i];
+                scores[i+1] = scores[i];
             }
-            HighScores.nicks[position] = name;
-            HighScores.scores[position] = score;
+            nicks[position] = name;
+            scores[position] = score;
+            HighScores.Nicks = nicks;
+            HighScores.Scores = scores;
             HighScores.SaveToFile();
         }
     }

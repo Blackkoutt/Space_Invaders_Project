@@ -10,19 +10,24 @@ namespace Space_Invaders_Project.Controllers
     public class Game
     {
         private MapBuilder builder;
+        private MainWindow _mainWindow;
 
-        public Game() { }
+        public Game(MainWindow mainWindow) 
+        { 
+            _mainWindow = mainWindow;
+        }
 
         public void StartGame()
         {
             List<Enemy> enemies = builder.CreateEnemies(1); // 1 level
             List<Barrier> barriers = builder.GetBarrier();
             // Player player 
-            Notification notification = new Notification();
+            MapView mapView = new MapView(_mainWindow);
+            Notification notification = new Notification(mapView);
             HighScores.AddSubscriber(notification);
             ScoreBoard scoreBoard = new ScoreBoard();
             HighScores.AddSubscriber(scoreBoard);
-            new Game_Controller();
+            new Game_Controller(_mainWindow, mapView);
         }
         public void GameOver()
         {

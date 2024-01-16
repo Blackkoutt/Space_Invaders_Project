@@ -14,6 +14,8 @@ namespace Space_Invaders_Project.Controllers
 {
     public class Game_Controller
     {
+        private MainWindow _mainWindow;
+        private MapView _mapView;
         private List<Player_Missle> playerMissles;
         private List<Enemy> enemies;
         private Player player;
@@ -23,12 +25,14 @@ namespace Space_Invaders_Project.Controllers
         private static DispatcherTimer gameTimer = new DispatcherTimer();
         private int notificationTimer = 0;
         //private Game game;
-        public Game_Controller()
+        public Game_Controller(MainWindow mainWindow, MapView mapView)
         {
+            _mainWindow = mainWindow;
+            _mapView = mapView;
+
             gameTimer.Tick += GameLoop;
             gameTimer.Interval = TimeSpan.FromMilliseconds(20);
             gameTimer.Start();
-
         }
 
         private void GameLoop(object sender, EventArgs e)
@@ -68,7 +72,7 @@ namespace Space_Invaders_Project.Controllers
         {
             if (notificationTimer == 0)
             {
-                foreach (Label label in MainWindow.MainCanvas.Children.OfType<Label>())
+                foreach (Label label in _mainWindow.MainCanvas.Children.OfType<Label>())
                     if (label.Tag.ToString() == "notification")
                     {
                         notificationTimer++;
@@ -78,7 +82,7 @@ namespace Space_Invaders_Project.Controllers
             else
                 if (notificationTimer++ > 20)
                 {
-                    MapView.RemoveNotification();
+                    _mapView.RemoveNotification();
                     notificationTimer = 0;
                 }
         }

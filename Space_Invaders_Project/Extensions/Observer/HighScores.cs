@@ -7,11 +7,14 @@ namespace Space_Invaders_Project.Extensions.Observer
 {
     public static class HighScores
     {
-        public static string[] nicks = new string[10];
-        public static int[] scores = new int[10];
+        private static string[] nicks = new string[10];
+        private static int[] scores = new int[10];
         private static List<ISubscriber> subscribers = new List<ISubscriber>();
         private static string nick;
-     
+        
+        public static string[] Nicks { get { return nicks; } set { nicks = value; } }
+        public static int[] Scores { get { return scores; } set { scores = value; } }
+
         public static void SaveToFile()
         {
             string fileName = "highscores.txt";
@@ -87,8 +90,6 @@ namespace Space_Invaders_Project.Extensions.Observer
                     break;
                 }
             }
-
-            
         }
         public static void AddSubscriber(ISubscriber s)
         {
@@ -123,8 +124,8 @@ namespace Space_Invaders_Project.Extensions.Observer
             //--------------------------------------
             HighScores.ReadFromFile();
             HighScores.Nick = "zzzzzz";
-            Notification nf = new Notification();
-            HighScores.AddSubscriber(nf);
+            //Notification nf = new Notification();
+            //HighScores.AddSubscriber(nf);
             HighScores.Notification(85);
             //--------------------------------------
         }

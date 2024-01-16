@@ -7,15 +7,28 @@ using System.Windows.Controls;
 
 namespace Space_Invaders_Project.Views
 {
-    public static class MapView
+    public class MapView
     {
-        public static void RemoveNotification()
+        private MainWindow _mainWindow;
+
+        public MapView(MainWindow mainWindow) 
         {
-            foreach (Label label in MainWindow.MainCanvas.Children.OfType<Label>())
+            _mainWindow = mainWindow;
+        }
+
+        public void AddNotification(Label label)
+        {
+            Canvas.SetTop(label, 10);
+            Canvas.SetLeft(label, 10);
+            _mainWindow.MainCanvas.Children.Add(label);
+        }
+        public void RemoveNotification()
+        {
+            foreach (Label label in _mainWindow.MainCanvas.Children.OfType<Label>())
             {
                 if (label.Tag == "notification")
                 {
-                    MainWindow.MainCanvas.Children.Remove(label);
+                    _mainWindow.MainCanvas.Children.Remove(label);
                     break;
                 }
             }

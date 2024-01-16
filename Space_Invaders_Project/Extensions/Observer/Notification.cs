@@ -10,8 +10,11 @@ namespace Space_Invaders_Project.Extensions.Observer
 {
     public class Notification : ISubscriber
     {
-        public Notification() { 
+        private MapView _mapView;
 
+        public Notification(MapView mapView) 
+        {
+            _mapView = mapView;
         }
 
         public void Update(string name, int score,int position)
@@ -19,13 +22,11 @@ namespace Space_Invaders_Project.Extensions.Observer
             Label label = new Label()
             {
                 Tag = "notification",
-                Content = String.Format("Pokonano gracza {0}, z wynikiem {1}", HighScores.nicks[position], HighScores.scores[position]),
+                Content = String.Format("Pokonano gracza {0}, z wynikiem {1}", HighScores.Nicks[position], HighScores.Scores[position]),
                 Background = Brushes.DarkGray,
                 Opacity = 0.4
             };
-            Canvas.SetTop(label, 10);
-            Canvas.SetLeft(label, 10);
-            MainWindow.MainCanvas.Children.Add(label);
+            _mapView.AddNotification(label);
         }
     }
 }
