@@ -26,6 +26,7 @@ namespace Space_Invaders_Project.Views
         public MainWindow()
         {
             InitializeComponent();
+            HighScores.ReadFromFile();
             MenuView menuView = new MenuView(this);
             new MenuController(menuView);
             //setUpCanvas();

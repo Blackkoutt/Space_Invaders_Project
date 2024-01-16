@@ -15,11 +15,13 @@ namespace Space_Invaders_Project.Controllers
             _menuView.FullScreenModeEvent += HandleFullScreenModeEvent;
             _menuView.ExitGameEvent += HandleExitGameEvent;
             _menuView.ShowHighScoresEvent += HandleShowHighScoresEvent;
+            _menuView.ReturnToMenuEvent += HandleReturnToMenuEvent;
         }
 
         private void HandleShowHighScoresEvent(object? sender, EventArgs e)
         {
-
+            _menuView.ClearMenuButtons();
+            _menuView.ShowHighScores();
         }
 
         private void HandleExitGameEvent(object? sender, EventArgs e)
@@ -33,10 +35,15 @@ namespace Space_Invaders_Project.Controllers
             _menuView.ChangeWindowSize();
             _menuView.CreateMenuButtons();
         }
-
+        
         private void HandleStartGameEvent(object? sender, EventArgs e)
         {
 
+        }
+        private void HandleReturnToMenuEvent(object? sender, EventArgs e)
+        {
+            _menuView.ClearMenuButtons();
+            _menuView.CreateMenuButtons();
         }
     }
 }

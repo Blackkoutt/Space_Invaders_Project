@@ -1,9 +1,11 @@
-﻿using Space_Invaders_Project.Views.Interfaces;
+﻿using Space_Invaders_Project.Extensions.Observer;
+using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 
 namespace Space_Invaders_Project.Views
 {
@@ -15,11 +17,13 @@ namespace Space_Invaders_Project.Views
         private Button highScoresButton;
         private Button exitGameButton;
         private Button fullScreenButton;
+        private Button returnToMenuButton;
 
         public event EventHandler StartGameEvent;
         public event EventHandler ShowHighScoresEvent;
         public event EventHandler ExitGameEvent;
         public event EventHandler FullScreenModeEvent;
+        public event EventHandler ReturnToMenuEvent;
 
         public MenuView(MainWindow mainWindow) 
         {
@@ -95,6 +99,25 @@ namespace Space_Invaders_Project.Views
                 _mainWindow.WindowState = WindowState.Maximized;
                 _mainWindow.WindowStyle = WindowStyle.None;
             }
+        }
+        public void ShowHighScores()
+        {
+            _mainWindow.Background.Opacity = 0.3;
+            Label titleLabel = new Label() { Content = "Top 10 highscores:", Foreground = Brushes.YellowGreen};
+            Canvas.SetTop(titleLabel, 10);
+            Canvas.SetLeft(titleLabel, canvas.Width / 2 - 135);
+            canvas.Children.Add(titleLabel);
+
+            for (int i = 0; i < 10; i++)
+            {
+                string formatterText = String.Format("#{0} - Nick: {1} - Score: {2}", i + 1, HighScores.Nicks[i], HighScores.Scores[i]);
+                Label newScore = new Label() { Content = formatterText, Foreground = Brushes.White, FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/#Press Start 2P"), };
+                Canvas.SetTop(newScore, 40 * (i + 1) + 20);
+                Canvas.SetLeft(newScore, canvas.Width / 2 - 160);
+                canvas.Children.Add(newScore);
+            }
+            returnToMenuButton = CreateButton(canvas.Width - 150, canvas.Height - 80, "Return");
+            returnToMenuButton.Click += delegate { ReturnToMenuEvent?.Invoke(this, EventArgs.Empty); };
         }
     }
 }

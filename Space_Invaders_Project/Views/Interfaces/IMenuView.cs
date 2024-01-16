@@ -13,9 +13,11 @@ namespace Space_Invaders_Project.Views.Interfaces
         event EventHandler ShowHighScoresEvent;
         event EventHandler ExitGameEvent;
         event EventHandler FullScreenModeEvent;
+        event EventHandler ReturnToMenuEvent;
 
         void ChangeWindowSize();
         void ClearMenuButtons();
         void CreateMenuButtons();
+        void ShowHighScores();
     }
 }
