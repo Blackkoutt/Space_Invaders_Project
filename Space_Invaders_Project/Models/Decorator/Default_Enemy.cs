@@ -12,7 +12,7 @@ namespace Space_Invaders_Project.Models
             throw new NotImplementedException();
         }
 
-        public override int onDeath()
+        public override void onDeath(Player player)
         {
             throw new NotImplementedException();
         }

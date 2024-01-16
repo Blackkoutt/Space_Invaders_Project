@@ -1,4 +1,5 @@
-﻿using Space_Invaders_Project.Views.Interfaces;
+﻿using Space_Invaders_Project.Extensions.Observer;
+using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Windows;
 

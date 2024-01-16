@@ -2,12 +2,24 @@
 
 namespace Space_Invaders_Project.Extensions.Observer
 {
-    public class ScoreBoard : Subscriber
+    public class ScoreBoard : ISubscriber
     {
         public ScoreBoard() { } 
-        public void Update(string name, int score, Dictionary<string, int> scoreBoard)
+        public void Update(string name, int score, int position)
         {
-            throw new System.NotImplementedException();
+            string[] nicks = HighScores.Nicks;
+            int[] scores = HighScores.Scores;
+
+            for (int i = 8; i >= position; i--)
+            {
+                nicks[i+1] = nicks[i];
+                scores[i+1] = scores[i];
+            }
+            nicks[position] = name;
+            scores[position] = score;
+            HighScores.Nicks = nicks;
+            HighScores.Scores = scores;
+            HighScores.SaveToFile();
         }
     }
 }

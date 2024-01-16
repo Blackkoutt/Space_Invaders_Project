@@ -14,9 +14,9 @@
             throw new System.NotImplementedException();
         }
 
-        public override int onDeath()
+        public override void onDeath(Player player)
         {
-            throw new System.NotImplementedException();
+            player.addScore(); //zaklada ze kazy przeciwnik jest warty 1 punkt
         }
 
         public override void setAttackSpeed()

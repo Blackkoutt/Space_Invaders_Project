@@ -21,6 +21,6 @@ namespace Space_Invaders_Project.Models
         public abstract int setHealth();
         public abstract void setDamage();   
         public abstract void setAttackSpeed();
-        public abstract int onDeath();
+        public abstract void onDeath(Player player);
     }
 }
