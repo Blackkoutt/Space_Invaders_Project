@@ -22,7 +22,7 @@ namespace Space_Invaders_Project.Controllers
             HighScores.AddSubscriber(scoreBoard);
             Notification notification = new Notification();
             HighScores.AddSubscriber(notification);
-          // new Game_Controller()
+            new Game_Controller();
         }
         public void GameOver()
         {

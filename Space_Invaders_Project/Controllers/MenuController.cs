@@ -36,7 +36,7 @@ namespace Space_Invaders_Project.Controllers
 
         private void HandleStartGameEvent(object? sender, EventArgs e)
         {
-            HighScores.TestNF();
+
         }
     }
 }
