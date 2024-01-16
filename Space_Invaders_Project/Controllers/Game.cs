@@ -18,10 +18,10 @@ namespace Space_Invaders_Project.Controllers
             List<Enemy> enemies = builder.CreateEnemies(1); // 1 level
             List<Barrier> barriers = builder.GetBarrier();
             // Player player 
-            ScoreBoard scoreBoard = new ScoreBoard();
-            HighScores.AddSubscriber(scoreBoard);
             Notification notification = new Notification();
             HighScores.AddSubscriber(notification);
+            ScoreBoard scoreBoard = new ScoreBoard();
+            HighScores.AddSubscriber(scoreBoard);
             new Game_Controller();
         }
         public void GameOver()
