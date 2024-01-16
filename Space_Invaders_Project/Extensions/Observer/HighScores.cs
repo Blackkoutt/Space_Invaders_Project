@@ -108,13 +108,23 @@ namespace Space_Invaders_Project.Extensions.Observer
             set { nick = value; } 
         }
 
-        public static void Test()
+        public static void TestSC()
         {
             //--------------------------------------
             HighScores.ReadFromFile();
             HighScores.Nick = "zzzzzz";
             ScoreBoard sc = new ScoreBoard();
             HighScores.AddSubscriber(sc);
+            HighScores.Notification(85);
+            //--------------------------------------
+        }
+        public static void TestNF()
+        {
+            //--------------------------------------
+            HighScores.ReadFromFile();
+            HighScores.Nick = "zzzzzz";
+            Notification nf = new Notification();
+            HighScores.AddSubscriber(nf);
             HighScores.Notification(85);
             //--------------------------------------
         }

@@ -22,7 +22,7 @@ namespace Space_Invaders_Project.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Canvas mainCanvas;
+        private static Canvas mainCanvas;
         public MainWindow()
         {
             InitializeComponent();
@@ -30,7 +30,7 @@ namespace Space_Invaders_Project.Views
             new MenuController(menuView);
             //setUpCanvas();
         }
-        public Canvas MainCanvas
+        public static Canvas MainCanvas
         {
             get { return mainCanvas; }
             set { mainCanvas = value; }

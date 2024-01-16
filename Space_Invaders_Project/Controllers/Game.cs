@@ -1,6 +1,7 @@
 ﻿using Space_Invaders_Project.Extensions.Builder;
 using Space_Invaders_Project.Extensions.Observer;
 using Space_Invaders_Project.Models;
+using Space_Invaders_Project.Views;
 using System.Collections.Generic;
 using System.Windows.Documents;
 

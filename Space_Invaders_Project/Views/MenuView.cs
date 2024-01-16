@@ -24,7 +24,7 @@ namespace Space_Invaders_Project.Views
         public MenuView(MainWindow mainWindow) 
         {
             _mainWindow = mainWindow;
-            canvas = _mainWindow.MainCanvas;
+            canvas = MainWindow.MainCanvas;
             _mainWindow.ResizeMode = ResizeMode.NoResize;
             _mainWindow.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/background.jpg")) };
             setUpCanvas();
@@ -37,6 +37,7 @@ namespace Space_Invaders_Project.Views
             canvas.Width = 800;
             canvas.Background = new SolidColorBrush(Colors.Transparent);
             _mainWindow.Content = canvas;
+            MainWindow.MainCanvas = canvas;
         }
         private Button CreateButton(double left, double top, string content)
         {
