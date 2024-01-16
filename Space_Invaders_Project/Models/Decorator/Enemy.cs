@@ -15,7 +15,7 @@ namespace Space_Invaders_Project.Models
         {
             position = new Point(x, y);
         }
-        public abstract Enemy_Missle shotMissle();
+        public abstract Enemy_Missile shotMissle();
         public abstract void setImage();
         public abstract void dealDamage();
         public abstract int setHealth();

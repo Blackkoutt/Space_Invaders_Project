@@ -39,7 +39,7 @@
             throw new System.NotImplementedException();
         }
 
-        public override Enemy_Missle shotMissle()
+        public override Enemy_Missile shotMissle()
         {
             throw new System.NotImplementedException();
         }

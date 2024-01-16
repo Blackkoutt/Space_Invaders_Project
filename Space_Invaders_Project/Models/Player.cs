@@ -1,9 +1,10 @@
 ﻿using Space_Invaders_Project.Extensions.Observer;
 using Space_Invaders_Project.Extensions.Strategy;
 using System;
-using System.Drawing;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace Space_Invaders_Project.Models
 {
@@ -12,11 +13,13 @@ namespace Space_Invaders_Project.Models
         private Point position;
         private int health;
         private int damage;
-        private int scoreMultiplier;
         private float attackSpeed;
-        private float missleSpeed;
+        private float missileSpeed;
+        private float scoreMultiplier;
         private float movementSpeed;
-        private ImageBrush model;
+        private ImageBrush skin;
+        private Rectangle model;
+        private Rect hitbox;
         private bool isDead;
         private Player_Bonus bonus;
         private int score;
@@ -31,13 +34,14 @@ namespace Space_Invaders_Project.Models
             /*position = new Point(x,y)*/
 
             // Przykładowe początkowe wartości
-            health = 100;
-            damage = 50;
+            health = 3;
+            damage = 1;
+            attackSpeed = 2;
+            missileSpeed = 6;
             scoreMultiplier = 1;
-            attackSpeed = 1.0f;
-            missleSpeed = 1.0f;
-            this.model = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/player.png")) };
-
+            skin = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/player.png")) };
+            model = new Rectangle { Tag = "player", Fill = this.skin, Height = 65, Width = 55, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+            hitbox = new Rect(position.X, position.Y, model.Width, model.Height);
             isDead = false;
             score = 0;  // nie wiem czy tutaj powinnismy trzymać score
         }
@@ -58,21 +62,30 @@ namespace Space_Invaders_Project.Models
         public void setPosition(int x, int y)
         {
             position = new Point(x, y);
+            hitbox.X = x;
+            hitbox.Y = y;
         }
         public void addBonus()
         {
             bonus.admitBonus(this);
         }
+        public Player_Missile shootMissile()
+        {
+            return new Player_Missile(new Point((position.X + model.Width / 2) - 2, position.Y), missileSpeed, damage);
+        }
         public void setBonusStrategy(Player_Bonus strategy)
         {
             bonus = strategy;
         }
+        public Rect Hitbox { get { return hitbox; } }
+        public Rectangle Model { get { return model; } }
+        public Point Position { get { return position; } }
+        public ImageBrush Skin { get { return skin; } }
         public void addScore()
         {
             score += scoreMultiplier;
             HighScores.Notification(score);
         }
-        public ImageBrush Model { get { return model; } }
         public bool IsDeath
         {
             get { return isDead; }
@@ -83,10 +96,10 @@ namespace Space_Invaders_Project.Models
             get { return health; }
             set { health = value; }
         }
-        public float MissleSpeed
+        public float MissileSpeed
         {
-            get { return missleSpeed; }
-            set { missleSpeed = value; }
+            get { return missileSpeed; }
+            set { missileSpeed = value; }
         }
         public float MovementSpeed
         {

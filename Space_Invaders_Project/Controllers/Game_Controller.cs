@@ -1,58 +1,123 @@
-﻿using Space_Invaders_Project.Extensions.Strategy;
+﻿using Space_Invaders_Project.Controllers.Interfaces;
 using Space_Invaders_Project.Models;
 using Space_Invaders_Project.Models.Interfaces;
 using Space_Invaders_Project.Views;
+using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Threading;
+using System.Windows.Input;
 
 namespace Space_Invaders_Project.Controllers
 {
     public class Game_Controller
     {
-        private MainWindow _mainWindow;
-        private MapView _mapView;
-        private List<Player_Missle> playerMissles;
+       // private List<Player_Missile> playerMissiles;
         private List<Enemy> enemies;
         private Player player;
         private List<Barrier> barriers;
-        private List<Enemy_Missle> enemyMissles;
+        private List<IMissile> missiles;
+       // private List<Enemy_Missile> enemyMissles;
         private int level;
-        private static DispatcherTimer gameTimer = new DispatcherTimer();
-        private int notificationTimer = 0;
-        //private Game game;
-        public Game_Controller(MainWindow mainWindow, MapView mapView)
+        private IMapView mapView;
+        private string playerMoveDirection;
+        public Game_Controller(Player player, IMapView mapView, IGame game)
         {
-            _mainWindow = mainWindow;
-            _mapView = mapView;
+            this.player = player;
+            this.mapView = mapView;
 
-            gameTimer.Tick += GameLoop;
-            gameTimer.Interval = TimeSpan.FromMilliseconds(20);
-            gameTimer.Start();
+            playerMoveDirection = "";
+
+            game.GameLoopTimerEvent += GameLoop;
+            mapView.KeyDownEvent += HandleKeyDownEvent;
+            mapView.KeyUpEvent += HandleKeyUpEvent;
+            missiles = new List<IMissile>();
+
         }
 
-        private void GameLoop(object sender, EventArgs e)
+
+        // Handler puszczenia przycisku 
+        private void HandleKeyUpEvent(object? sender, KeyEventArgsWrapper e)
+        {
+            if (e.Key == Key.Left || e.Key == Key.Right)
+                playerMoveDirection = "";
+            if (e.Key == Key.Space)
+            {
+                Player_Missile newMissile = player.shootMissile();
+                missiles.Add(newMissile);
+                mapView.SpawnMissileModel(newMissile.model, newMissile.Position);
+            }
+        }
+
+
+        // Handler wciśnięcia przycisku 
+        private void HandleKeyDownEvent(object? sender, KeyEventArgsWrapper e)
+        {
+            if (e.Key == Key.Left)
+                playerMoveDirection = "left";
+            else if (e.Key == Key.Right)
+                playerMoveDirection = "right";
+        }
+
+
+        // Główna pętla gry wykonywana przez timer z klasy Game
+        private void GameLoop(object? sender, EventArgs e)
         {
             CheckIfNotificationToRemove();
+            MoveEntities();
+            DrawEntities();
+            
         }
 
-        // move enemies and missles
-        public void Move()
+
+        // Metoda rysująca wszytskie postacie na mapie
+        private void DrawEntities()
+        {
+            mapView.DrawEntity(player.Model, player.Position);
+            foreach(IMissile m in missiles)
+            {
+                mapView.DrawEntity(m.Model, m.Position);
+            }
+            
+        }
+
+
+        // Metoda przesuwająca gracza w zależności od wciśniętego wcześniej klawisza
+        private void MovePlayer()
+        {
+            if (playerMoveDirection == "right" && player.Position.X + 75 < mapView.getCanvas().Width)
+            {
+                player.setPosition((int)player.Position.X + 10, (int)player.Position.Y);
+            }
+            else if (playerMoveDirection == "left" && player.Position.X > 0)
+            {
+                player.setPosition((int)player.Position.X - 10, (int)player.Position.Y);
+            }
+        }
+
+
+        // Metoda przesuwająca pocisk
+        private void MoveMissile(IMissile missile)
+        {
+            missile.setPosition(missile.Speed);
+        }
+
+
+        // Metoda przesuwająca wszytskie obiekty znajdujące się na mapie
+        private void MoveEntities()
+        {
+            MovePlayer();
+            foreach(IMissile m in missiles)
+            {
+                MoveMissile(m);
+            }
+        }
+
+
+        public void CheckForCollisions (IMissile missle)
         {
 
         }
-        public void CheckForCollisions (IMissle missle)
-        {
 
-        }
-        /*public void setGame(Game game)
-        {
-
-        }*/
         public void SetEnemies(List<Enemy> enemies)
         {
 

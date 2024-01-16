@@ -13,6 +13,8 @@
     <None Remove="Assets\barrier_orange.png" />
     <None Remove="Assets\barrier_red.png" />
     <None Remove="Assets\player.png" />
+    <None Remove="Fonts\DotGothic16-Regular.ttf" />
+    <None Remove="Fonts\PressStart2P-Regular.ttf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +23,8 @@
     <Resource Include="Assets\barrier_orange.png" />
     <Resource Include="Assets\barrier_red.png" />
     <Resource Include="Assets\player.png" />
+    <Resource Include="Fonts\DotGothic16-Regular.ttf" />
+    <Resource Include="Fonts\PressStart2P-Regular.ttf" />
   </ItemGroup>
 
 </Project>

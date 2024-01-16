@@ -37,7 +37,7 @@ namespace Space_Invaders_Project.Models
             throw new NotImplementedException();
         }
 
-        public override Enemy_Missle shotMissle()
+        public override Enemy_Missile shotMissle()
         {
             throw new NotImplementedException();
         }
