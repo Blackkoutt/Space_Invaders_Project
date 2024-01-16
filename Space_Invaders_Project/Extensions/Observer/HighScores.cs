@@ -5,32 +5,31 @@ using System.IO;
 
 namespace Space_Invaders_Project.Extensions.Observer
 {
-    public class HighScores
+    public static class HighScores
     {
-        private Dictionary<string, int> scoreBoard;
-        private List<Subscriber> subscribers;
-        private string nick;
-        public HighScores()
-        {
-            scoreBoard = new Dictionary<string, int>();
-        }
-        public void SaveToFile()
+        public static string[] nicks = new string[10];
+        public static int[] scores = new int[10];
+        private static List<ISubscriber> subscribers = new List<ISubscriber>();
+        private static string nick;
+     
+        public static void SaveToFile()
         {
             string fileName = "highscores.txt";
             StreamWriter sw = new StreamWriter(fileName);
             sw.WriteLine("//\"nick score\"");
-            foreach (var item in scoreBoard)
+            for (int i =  0; i < 10; i++) 
             {
-                sw.WriteLine(item.Key+" "+item.Value.ToString());
+                sw.WriteLine(nicks[i] + " " + scores[i]);
             }
             sw.Close();
         }
 
         //throw Exceptions
-        public void ReadFromFile()
+        public static void ReadFromFile()
         {
             StreamReader sr;
             string fileName = "highscores.txt";
+            int lineNumber = 0;
             try
             {
                 sr = new StreamReader(fileName);
@@ -69,31 +68,55 @@ namespace Space_Invaders_Project.Extensions.Observer
                     {
                         throw new CannotConvertException($"Failed to parse score value in {fileName}");
                     }
-                    scoreBoard.Add(nick, scoreInt);
+                    nicks[lineNumber] = nick;
+                    scores[lineNumber++] = scoreInt;
                 }
             }
-            int a = 1;
             sr.Close();
         }
-        public void Notification(int score)
+        public static void Notification(int score)
         {
-            foreach (Subscriber subscriber in subscribers)
+            for (int i = 0; i < 10; i++)
             {
-                subscriber.Update(nick, score, scoreBoard);
+                if (score > scores[i])
+                {
+                    foreach (ISubscriber subscriber in subscribers)
+                    {
+                        subscriber.Update(nick, score, i);
+                    }
+                    break;
+                }
             }
+
+            
         }
-        public void Subscribe(Subscriber s)
+        public static void AddSubscriber(ISubscriber s)
         {
             subscribers.Add(s);
         }
-        public void Unsubscribe(Subscriber s)
+        public static void RemoveSubscriber(ISubscriber s)
         {
             subscribers.Remove(s);
         }
-        public string Nick
+        public static void RemoveAllSubscribers()
         {
-            get { return nick; }
-            set { nick = value; }
+            subscribers.Clear();
+        }
+        public static string Nick 
+        {
+            get { return nick; } 
+            set { nick = value; } 
+        }
+
+        public static void Test()
+        {
+            //--------------------------------------
+            HighScores.ReadFromFile();
+            HighScores.Nick = "zzzzzz";
+            ScoreBoard sc = new ScoreBoard();
+            HighScores.AddSubscriber(sc);
+            HighScores.Notification(85);
+            //--------------------------------------
         }
     }
 }

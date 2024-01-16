@@ -1,4 +1,5 @@
-﻿using Space_Invaders_Project.Extensions.Strategy;
+﻿using Space_Invaders_Project.Extensions.Observer;
+using Space_Invaders_Project.Extensions.Strategy;
 using System;
 using System.Drawing;
 using System.Windows.Media;
@@ -11,9 +12,9 @@ namespace Space_Invaders_Project.Models
         private Point position;
         private int health;
         private int damage;
+        private int scoreMultiplier;
         private float attackSpeed;
         private float missleSpeed;
-        private float scoreMultiplier;
         private float movementSpeed;
         private ImageBrush model;
         private bool isDead;
@@ -32,9 +33,9 @@ namespace Space_Invaders_Project.Models
             // Przykładowe początkowe wartości
             health = 100;
             damage = 50;
+            scoreMultiplier = 1;
             attackSpeed = 1.0f;
             missleSpeed = 1.0f;
-            scoreMultiplier = 1.0f;
             this.model = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/player.png")) };
 
             isDead = false;
@@ -65,6 +66,11 @@ namespace Space_Invaders_Project.Models
         public void setBonusStrategy(Player_Bonus strategy)
         {
             bonus = strategy;
+        }
+        public void addScore()
+        {
+            score += scoreMultiplier;
+            HighScores.Notification(score);
         }
         public ImageBrush Model { get { return model; } }
         public bool IsDeath
@@ -97,7 +103,7 @@ namespace Space_Invaders_Project.Models
             get { return damage; }
             set { damage = value; }
         }
-        public float ScoreMultiplier
+        public int ScoreMultiplier
         {
             get { return scoreMultiplier; }
             set { scoreMultiplier = value; }

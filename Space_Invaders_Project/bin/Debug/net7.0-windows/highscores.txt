@@ -1,1 +1,11 @@
-//nick score
+//"nick score"
+jeden 100
+dwa 90
+trzy 80
+cztery 70
+piec 60
+szesc 50
+siedem 40
+osiem 30
+dziewiec 20
+dziesiec 10

@@ -10,7 +10,7 @@
             throw new System.NotImplementedException();
         }
 
-        public override int onDeath()
+        public override void onDeath(Player player)
         {
             throw new System.NotImplementedException();
         }

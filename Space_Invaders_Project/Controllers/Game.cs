@@ -1,4 +1,5 @@
 ﻿using Space_Invaders_Project.Extensions.Builder;
+using Space_Invaders_Project.Extensions.Observer;
 using Space_Invaders_Project.Models;
 using System.Collections.Generic;
 using System.Windows.Documents;
@@ -15,12 +16,16 @@ namespace Space_Invaders_Project.Controllers
         {
             List<Enemy> enemies = builder.CreateEnemies(1); // 1 level
             List<Barrier> barriers = builder.GetBarrier();
-           // Player player 
+            // Player player 
+            ScoreBoard scoreBoard = new ScoreBoard();
+            HighScores.AddSubscriber(scoreBoard);
+            Notification notification = new Notification();
+            HighScores.AddSubscriber(notification);
           // new Game_Controller()
         }
         public void GameOver()
         {
-
+            HighScores.RemoveAllSubscribers();
         }
         public void ChooseMapBuilder(byte difficulty)
         {
