@@ -19,5 +19,7 @@ namespace Space_Invaders_Project.Views.Interfaces
         Size GetWindowSize();
         void PrepareMap(Player player);
         void SpawnMissileModel(Rectangle model, Point position);
+        void AddNotification(Label label);
+        void RemoveNotification();
     }
 }

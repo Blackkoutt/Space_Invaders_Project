@@ -5,6 +5,8 @@ using Space_Invaders_Project.Views;
 using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Space_Invaders_Project.Controllers
@@ -20,6 +22,7 @@ namespace Space_Invaders_Project.Controllers
         private int level;
         private IMapView mapView;
         private string playerMoveDirection;
+        private int notificationTimer = 0;
         public Game_Controller(Player player, IMapView mapView, IGame game)
         {
             this.player = player;
@@ -137,17 +140,20 @@ namespace Space_Invaders_Project.Controllers
         {
             if (notificationTimer == 0)
             {
-                foreach (Label label in _mainWindow.MainCanvas.Children.OfType<Label>())
+                foreach (Label label in mapView.getCanvas().Children.OfType<Label>())
+                {
                     if (label.Tag.ToString() == "notification")
                     {
                         notificationTimer++;
                         break;
                     }
+                }
+                    
             }
             else
                 if (notificationTimer++ > 20)
                 {
-                    _mapView.RemoveNotification();
+                    mapView.RemoveNotification();
                     notificationTimer = 0;
                 }
         }

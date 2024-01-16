@@ -32,7 +32,7 @@ namespace Space_Invaders_Project.Controllers
             Size windowSize = _mapView.GetWindowSize();
             player.setPosition((int)(windowSize.Width/2 - (player.Model.Width/2)), (int)windowSize.Height - 105);
 
-            Notification notification = new Notification(mapView);
+            Notification notification = new Notification(_mapView);
             HighScores.AddSubscriber(notification);
             ScoreBoard scoreBoard = new ScoreBoard();
             HighScores.AddSubscriber(scoreBoard);

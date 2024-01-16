@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows;
 using Space_Invaders_Project.Models;
 using System.Windows.Input;
+using System.Linq;
 
 namespace Space_Invaders_Project.Views
 {
@@ -57,7 +58,7 @@ namespace Space_Invaders_Project.Views
         public void PrepareMap(Player player)
         {
             canvas.Background = new SolidColorBrush(Colors.Black);
-            Label scoreLabel = CreateLabel($"Score: {0}");
+            Label scoreLabel = CreateLabel($"Score: {0}", "Score");
             Canvas.SetLeft(scoreLabel, 0);
             Canvas.SetTop(scoreLabel, 0);
             canvas.Children.Add(scoreLabel);
@@ -105,13 +106,14 @@ namespace Space_Invaders_Project.Views
 
 
         // Metoda tworząca label Score
-        private Label CreateLabel(string content)
+        private Label CreateLabel(string content, string tag)
         {
            return new Label() 
            {
                Content = content,
                Foreground = Brushes.White,
-               FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/#Press Start 2P")
+               FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/#Press Start 2P"),
+               Tag = tag
            };
         }
     }

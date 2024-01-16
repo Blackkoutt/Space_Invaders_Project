@@ -15,7 +15,7 @@ namespace Space_Invaders_Project.Models
         private int damage;
         private float attackSpeed;
         private float missileSpeed;
-        private float scoreMultiplier;
+        private int scoreMultiplier;
         private float movementSpeed;
         private ImageBrush skin;
         private Rectangle model;
