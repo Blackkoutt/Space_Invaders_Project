@@ -1,6 +1,7 @@
 ﻿using Space_Invaders_Project.Models.Decorator;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace Space_Invaders_Project.Models
 {
@@ -65,5 +66,9 @@ namespace Space_Invaders_Project.Models
             decoratedEnemy.drawEnemy(canvas);
         }
 
+        public virtual Rectangle[] getModel()
+        {
+            return decoratedEnemy.getModel();
+        }
     }
 }

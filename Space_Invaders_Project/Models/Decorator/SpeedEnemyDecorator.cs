@@ -9,7 +9,7 @@ namespace Space_Invaders_Project.Models
     {
         public SpeedEnemyDecorator(IEnemy enemy) : base(enemy)
         {
-            ((Default_Enemy)enemy).setAttackVelocity(12);
+            enemy.setAttackVelocity(12);
             enemy.setLegSkin(new BitmapImage(new Uri("pack://application:,,,/Assets/speedEnemyLeg.png")));
         }
     }

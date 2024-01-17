@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace Space_Invaders_Project.Models.Decorator
 {
@@ -21,5 +22,6 @@ namespace Space_Invaders_Project.Models.Decorator
         public void setAttackVelocity(int atv);
         public void onDeath(Player player);
         public void drawEnemy(Canvas canvas);
+        public Rectangle[] getModel();
     }
 }

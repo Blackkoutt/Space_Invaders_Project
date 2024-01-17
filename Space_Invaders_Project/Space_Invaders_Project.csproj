@@ -12,7 +12,17 @@
     <None Remove="Assets\barrier_green.png" />
     <None Remove="Assets\barrier_orange.png" />
     <None Remove="Assets\barrier_red.png" />
+    <None Remove="Assets\baseEnemyArm.png" />
+    <None Remove="Assets\baseEnemyBody.png" />
+    <None Remove="Assets\baseEnemyLeg.png" />
+    <None Remove="Assets\damageEnemyArm.png" />
+    <None Remove="Assets\healthEnemyBody.png" />
     <None Remove="Assets\player.png" />
+    <None Remove="Assets\speedEnemyLeg.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\baseEnemyBody.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,7 +30,12 @@
     <Resource Include="Assets\barrier_green.png" />
     <Resource Include="Assets\barrier_orange.png" />
     <Resource Include="Assets\barrier_red.png" />
+    <Resource Include="Assets\baseEnemyArm.png" />
+    <Resource Include="Assets\baseEnemyLeg.png" />
+    <Resource Include="Assets\damageEnemyArm.png" />
+    <Resource Include="Assets\healthEnemyBody.png" />
     <Resource Include="Assets\player.png" />
+    <Resource Include="Assets\speedEnemyLeg.png" />
   </ItemGroup>
 
 </Project>

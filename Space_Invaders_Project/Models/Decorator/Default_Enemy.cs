@@ -13,7 +13,7 @@ namespace Space_Invaders_Project.Models
     {
         protected System.Drawing.Point position;
         protected ImageBrush armSkin, bodySkin, legSkin;
-        protected System.Windows.Shapes.Rectangle armModel, bodyModel, legModel;
+        protected Rectangle armModel, bodyModel, legModel;
         protected Rect hitbox;
         protected int health;
         protected int damage;
@@ -21,10 +21,9 @@ namespace Space_Invaders_Project.Models
         protected bool isDead;
 
 
-        public Default_Enemy(System.Drawing.Point position) 
+        public Default_Enemy(System.Drawing.Point position)
         {
             this.position = position;
-            setBodySkin(new BitmapImage(new Uri("pack://application:,,,/Assets/barrier_green.png")));
             setBodySkin(new BitmapImage(new Uri("pack://application:,,,/Assets/baseEnemyBody.png")));
             setArmSkin(new BitmapImage(new Uri("pack://application:,,,/Assets/baseEnemyArm.png")));
             setLegSkin(new BitmapImage(new Uri("pack://application:,,,/Assets/baseEnemyLeg.png")));
@@ -41,60 +40,77 @@ namespace Space_Invaders_Project.Models
         {
             position = new System.Drawing.Point(x, y);
         }
-        public  void dealDamage(Player player)
+        public void dealDamage(Player player)
         {
             health -= 1;
             if (health == 0)
                 onDeath(player);
         }
 
-        public  void onDeath(Player player)
+        public void onDeath(Player player)
         {
             player.addScore();
         }
 
-        public  void setAttackVelocity(int atv)
+        public void setAttackVelocity(int atv)
         {
             attackVelocity = atv;
         }
 
-        public  void setDamage(int dmg)
+        public void setDamage(int dmg)
         {
             damage = dmg;
         }
 
-        public  void setHealth(int hp)
+        public void setHealth(int hp)
         {
             health = hp;
         }
 
-        public  void setBodySkin(BitmapImage source)
+        public void setBodySkin(BitmapImage source)
         {
             bodySkin = new ImageBrush() { ImageSource = source };
+            if (bodyModel == null)
+                bodyModel = new Rectangle() { Fill = bodySkin };
+            else
+                bodyModel.Fill = bodySkin;
         }
         public void setArmSkin(BitmapImage source)
         {
             armSkin = new ImageBrush() { ImageSource = source };
+            if (armModel == null)
+                armModel = new Rectangle() { Fill = armSkin };
+            else
+                armModel.Fill = armSkin;
         }
         public void setLegSkin(BitmapImage source)
         {
             legSkin = new ImageBrush() { ImageSource = source };
+            if (legModel == null)
+                legModel = new Rectangle() { Fill = legSkin };
+            else
+                legModel.Fill = legSkin;
         }
 
-        public  Enemy_Missle shootMissle(int dmg, int speed)
+        public Enemy_Missle shootMissle(int dmg, int speed)
         {
             return new Enemy_Missle(position, dmg, speed);
         }
 
-        public  void drawEnemy(Canvas canvas)
+        public void drawEnemy(Canvas canvas)
         {
             //Najpierw body żeby było na dnie, potem reszta
-            Canvas.SetTop(this.bodyModel, position.X);
-            Canvas.SetLeft(this.bodyModel, position.Y);
             Canvas.SetTop(this.armModel, position.X);
             Canvas.SetLeft(this.armModel, position.Y);
+            Canvas.SetTop(this.bodyModel, position.X);
+            Canvas.SetLeft(this.bodyModel, position.Y);
             Canvas.SetTop(this.legModel, position.X);
             Canvas.SetLeft(this.legModel, position.Y);
+        }
+
+        public Rectangle[] getModel()
+        {
+            return new Rectangle[] { armModel, bodyModel, legModel };
         }
     }
 }

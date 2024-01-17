@@ -9,7 +9,7 @@ namespace Space_Invaders_Project.Models
     {
         public HealthEnemyDecorator(IEnemy enemy) : base(enemy)
         {
-            ((Default_Enemy)enemy).setHealth(20);
+            enemy.setHealth(20);
             enemy.setBodySkin(new BitmapImage(new Uri("pack://application:,,,/Assets/healthEnemyBody.png")));
         }
     }
