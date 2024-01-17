@@ -1,39 +1,69 @@
-﻿using Space_Invaders_Project.Extensions.Builder;
+﻿using Space_Invaders_Project.Controllers.Interfaces;
+using Space_Invaders_Project.Extensions.Builder;
 using Space_Invaders_Project.Extensions.Observer;
 using Space_Invaders_Project.Models;
 using Space_Invaders_Project.Models.Decorator;
 using Space_Invaders_Project.Views;
+using Space_Invaders_Project.Views.Interfaces;
+using System;
 using System.Collections.Generic;
-using System.Windows.Documents;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace Space_Invaders_Project.Controllers
 {
-    public class Game
+    public class Game : IGame
     {
         private MapBuilder builder;
-        private MainWindow _mainWindow;
+        private IMapView _mapView;
+        private DispatcherTimer gameTimer;
+        public event EventHandler GameLoopTimerEvent;
 
-        public Game(MainWindow mainWindow) 
-        { 
-            _mainWindow = mainWindow;
+        public Game(IMapView mapView) 
+        {
+            _mapView = mapView;
+            gameTimer = new DispatcherTimer();
         }
 
+
+        // Metoda przygotowująca grę
         public void StartGame()
         {
             List<IEnemy> enemies = builder.CreateEnemies(1); // 1 level
             List<Barrier> barriers = builder.GetBarrier();
-            // Player player 
-            MapView mapView = new MapView(_mainWindow);
-            Notification notification = new Notification(mapView);
+            Player player = Player.getInstance();
+            Size windowSize = _mapView.GetWindowSize();
+            player.setPosition((int)(windowSize.Width/2 - (player.Model.Width/2)), (int)windowSize.Height - 105);
+            for(int i =0; i<enemies.Count;i++)
+            {
+
+            }
+            /*for(int i = 0; i<barriers.Count; i++)
+            {
+                barriers[i].setPosition()
+            }*/
+
+            Notification notification = new Notification(_mapView);
             HighScores.AddSubscriber(notification);
             ScoreBoard scoreBoard = new ScoreBoard();
             HighScores.AddSubscriber(scoreBoard);
-            new Game_Controller(_mainWindow, mapView);
+
+            // Przygotowanie mapy
+            Game_Controller controller = new Game_Controller(player, _mapView, this);
+            _mapView.PrepareMap(player);
+
+            // Uruchomienie Timera który co 20 milisekund wykonuje główną pętlę gry
+            gameTimer.Tick += delegate { GameLoopTimerEvent?.Invoke(this, EventArgs.Empty); };
+            gameTimer.Interval = TimeSpan.FromMilliseconds(20);
+            gameTimer.Start();
         }
         public void GameOver()
         {
             HighScores.RemoveAllSubscribers();
         }
+
+
+        // Metoda przypisująca buider w zależności od wybranego przez użytkownika poziomu trudności
         public void ChooseMapBuilder(byte difficulty)
         {
             switch (difficulty)

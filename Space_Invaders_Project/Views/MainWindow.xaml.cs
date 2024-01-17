@@ -22,19 +22,12 @@ namespace Space_Invaders_Project.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Canvas mainCanvas;
         public MainWindow()
         {
             InitializeComponent();
             HighScores.ReadFromFile();
             MenuView menuView = new MenuView(this);
             new MenuController(menuView);
-            //setUpCanvas();
-        }
-        public Canvas MainCanvas
-        {
-            get { return mainCanvas; }
-            set { mainCanvas = value; }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Space_Invaders_Project.Views;
+using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ namespace Space_Invaders_Project.Extensions.Observer
 {
     public class Notification : ISubscriber
     {
-        private MapView _mapView;
+        private IMapView _mapView;
 
-        public Notification(MapView mapView) 
+        public Notification(IMapView mapView) 
         {
             _mapView = mapView;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Windows.Automation;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -11,11 +12,14 @@ namespace Space_Invaders_Project.Models
         private int health; // wartości 0,1,2,3, gdzie 0 to brak bariery
         private ImageBrush model;
 
-        public Barrier(Point position)
+        public Barrier()
         {
-            this.position = position;
             health = 3;
             MapHealthToModel();
+        }
+        public void setPosition(Point position)
+        {
+            this.position = position;
         }
         public void MapHealthToModel()
         {

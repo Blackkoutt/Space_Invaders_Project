@@ -19,6 +19,8 @@
     <None Remove="Assets\healthEnemyBody.png" />
     <None Remove="Assets\player.png" />
     <None Remove="Assets\speedEnemyLeg.png" />
+    <None Remove="Fonts\DotGothic16-Regular.ttf" />
+    <None Remove="Fonts\PressStart2P-Regular.ttf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +38,8 @@
     <Resource Include="Assets\healthEnemyBody.png" />
     <Resource Include="Assets\player.png" />
     <Resource Include="Assets\speedEnemyLeg.png" />
+    <Resource Include="Fonts\DotGothic16-Regular.ttf" />
+    <Resource Include="Fonts\PressStart2P-Regular.ttf" />
   </ItemGroup>
 
 </Project>
