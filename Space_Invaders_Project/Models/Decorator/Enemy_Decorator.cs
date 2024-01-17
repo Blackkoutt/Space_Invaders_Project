@@ -1,47 +1,74 @@
-﻿namespace Space_Invaders_Project.Models
+﻿using Space_Invaders_Project.Models.Decorator;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace Space_Invaders_Project.Models
 {
-    public abstract class Enemy_Decorator : Enemy
+    public abstract class Enemy_Decorator : IEnemy
     {
-        private Enemy enemy;
+        protected IEnemy decoratedEnemy;
 
-        public Enemy_Decorator(Enemy enemy)
+        public Enemy_Decorator(IEnemy enemy)
         {
-            this.enemy = enemy;
+            decoratedEnemy = enemy;
+        }
+        public virtual void SetPosition(int x, int y)
+        {
+            decoratedEnemy.SetPosition(x, y);
         }
 
-        public override void dealDamage()
+        public virtual Enemy_Missle shootMissle(int dmg, int speed)
         {
-            throw new System.NotImplementedException();
+            return decoratedEnemy.shootMissle(dmg, speed);
         }
 
-        public override void onDeath(Player player)
+        public virtual void dealDamage(Player player)
         {
-            player.addScore(); //zaklada ze kazy przeciwnik jest warty 1 punkt
+            decoratedEnemy.dealDamage(player);
         }
 
-        public override void setAttackSpeed()
+        public virtual void onDeath(Player player)
         {
-            throw new System.NotImplementedException();
+            decoratedEnemy.onDeath(player);
         }
 
-        public override void setDamage()
+        public virtual void setAttackVelocity(int atv)
         {
-            throw new System.NotImplementedException();
+            decoratedEnemy.setAttackVelocity(atv);
         }
 
-        public override int setHealth()
+        public virtual void setDamage(int dmg)
         {
-            return enemy.setHealth();
+            decoratedEnemy.setDamage(dmg);
         }
 
-        public override void setImage()
+        public virtual void setHealth(int hp)
         {
-            throw new System.NotImplementedException();
+            decoratedEnemy.setHealth(hp);
         }
 
-        public override Enemy_Missle shotMissle()
+        public virtual void setBodySkin(BitmapImage source)
         {
-            throw new System.NotImplementedException();
+            decoratedEnemy.setBodySkin(source);
+        }
+        public virtual void setArmSkin(BitmapImage source)
+        {
+            decoratedEnemy.setArmSkin(source);
+        }
+        public virtual void setLegSkin(BitmapImage source)
+        {
+            decoratedEnemy.setLegSkin(source);
+        }
+
+        public virtual void drawEnemy(Canvas canvas)
+        {
+            decoratedEnemy.drawEnemy(canvas);
+        }
+
+        public virtual Rectangle[] getModel()
+        {
+            return decoratedEnemy.getModel();
         }
     }
 }

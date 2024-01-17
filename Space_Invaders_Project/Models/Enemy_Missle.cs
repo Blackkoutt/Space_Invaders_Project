@@ -6,10 +6,10 @@ namespace Space_Invaders_Project.Models
     public class Enemy_Missle : IMissle
     {
         private Point position;
-        private float speed;
+        private int speed;
         private int damage;
 
-        public Enemy_Missle(Point position, float speed, int damage)
+        public Enemy_Missle(Point position, int damage, int speed)
         {
             this.position = position;
             this.speed = speed;
@@ -29,7 +29,7 @@ namespace Space_Invaders_Project.Models
         // Nie pamiętam jak to dokładnie miało działać ;/
         public void move()
         {
-            throw new System.NotImplementedException();
+            position.Y += speed;
         }
     }
 }

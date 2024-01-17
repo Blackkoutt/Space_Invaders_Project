@@ -12,7 +12,7 @@ namespace Space_Invaders_Project.Extensions.Strategy
         public FastMissleBonus() { }
         public override void admitBonus(Player player)
         {
-            player.MissleSpeed = 1.2f; // przykładowa wartość
+            player.AttackVelocity = 1.2f; // przykładowa wartość
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Space_Invaders_Project.Models
         private int damage;
         private int scoreMultiplier;
         private float attackSpeed;
-        private float missleSpeed;
+        private float attackVelocity;
         private float movementSpeed;
         private ImageBrush model;
         private bool isDead;
@@ -35,7 +35,7 @@ namespace Space_Invaders_Project.Models
             damage = 50;
             scoreMultiplier = 1;
             attackSpeed = 1.0f;
-            missleSpeed = 1.0f;
+            attackVelocity = 1.0f;
             this.model = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/player.png")) };
 
             isDead = false;
@@ -50,7 +50,7 @@ namespace Space_Invaders_Project.Models
             return playerInstance;
         }
         // Nie wiem co to dokładnie miało na celu
-        /*public Player_Missle shotMissle()
+        /*public Player_Missle shootMissle()
         {
             return new Player_Missle();
         }*/
@@ -83,10 +83,10 @@ namespace Space_Invaders_Project.Models
             get { return health; }
             set { health = value; }
         }
-        public float MissleSpeed
+        public float AttackVelocity
         {
-            get { return missleSpeed; }
-            set { missleSpeed = value; }
+            get { return attackVelocity; }
+            set { attackVelocity = value; }
         }
         public float MovementSpeed
         {

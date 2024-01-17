@@ -1,4 +1,7 @@
 ﻿using Space_Invaders_Project.Extensions.Observer;
+using Space_Invaders_Project.Models;
+using Space_Invaders_Project.Models.Decorator;
+using Space_Invaders_Project.Views;
 using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Windows;
@@ -45,5 +48,6 @@ namespace Space_Invaders_Project.Controllers
             _menuView.ClearMenuButtons();
             _menuView.CreateMenuButtons();
         }
+
     }
 }

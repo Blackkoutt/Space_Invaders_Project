@@ -1,4 +1,6 @@
 ﻿using Space_Invaders_Project.Extensions.Observer;
+using Space_Invaders_Project.Models.Decorator;
+using Space_Invaders_Project.Models;
 using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Windows;
@@ -6,6 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
+using System.Windows.Shapes;
+using System.Collections.Generic;
 
 namespace Space_Invaders_Project.Views
 {

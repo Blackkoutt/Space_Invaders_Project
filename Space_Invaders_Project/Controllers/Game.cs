@@ -1,6 +1,7 @@
 ﻿using Space_Invaders_Project.Extensions.Builder;
 using Space_Invaders_Project.Extensions.Observer;
 using Space_Invaders_Project.Models;
+using Space_Invaders_Project.Models.Decorator;
 using Space_Invaders_Project.Views;
 using System.Collections.Generic;
 using System.Windows.Documents;
@@ -19,7 +20,7 @@ namespace Space_Invaders_Project.Controllers
 
         public void StartGame()
         {
-            List<Enemy> enemies = builder.CreateEnemies(1); // 1 level
+            List<IEnemy> enemies = builder.CreateEnemies(1); // 1 level
             List<Barrier> barriers = builder.GetBarrier();
             // Player player 
             MapView mapView = new MapView(_mainWindow);
