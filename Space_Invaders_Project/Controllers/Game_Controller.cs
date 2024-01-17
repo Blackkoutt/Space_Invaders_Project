@@ -1,5 +1,6 @@
 ﻿using Space_Invaders_Project.Extensions.Strategy;
 using Space_Invaders_Project.Models;
+using Space_Invaders_Project.Models.Decorator;
 using Space_Invaders_Project.Models.Interfaces;
 using Space_Invaders_Project.Views;
 using System;
@@ -17,7 +18,7 @@ namespace Space_Invaders_Project.Controllers
         private MainWindow _mainWindow;
         private MapView _mapView;
         private List<Player_Missle> playerMissles;
-        private List<Enemy> enemies;
+        private List<IEnemy> enemies;
         private Player player;
         private List<Barrier> barriers;
         private List<Enemy_Missle> enemyMissles;
@@ -53,7 +54,7 @@ namespace Space_Invaders_Project.Controllers
         {
 
         }*/
-        public void SetEnemies(List<Enemy> enemies)
+        public void SetEnemies(List<IEnemy> enemies)
         {
 
         }

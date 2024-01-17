@@ -1,4 +1,6 @@
 ﻿using Space_Invaders_Project.Extensions.Observer;
+using Space_Invaders_Project.Models.Decorator;
+using Space_Invaders_Project.Models;
 using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Windows;
@@ -118,6 +120,18 @@ namespace Space_Invaders_Project.Views
             }
             returnToMenuButton = CreateButton(canvas.Width - 150, canvas.Height - 80, "Return");
             returnToMenuButton.Click += delegate { ReturnToMenuEvent?.Invoke(this, EventArgs.Empty); };
+        }
+        public static void TestEnemy(MenuView mw)
+        {
+            IEnemy enemy = new Default_Enemy(new System.Drawing.Point(0, 10));
+            IEnemy enemy2 = new Default_Enemy(new System.Drawing.Point(40, 10));
+            IEnemy enemy3 = new Default_Enemy(new System.Drawing.Point(80, 10));
+
+            IEnemy enemyDmg = new DamageEnemyDecorator(enemy);
+
+            enemy.drawEnemy(mw.canvas);
+            enemy2.drawEnemy(mw.canvas);
+            enemy3.drawEnemy(mw.canvas);
         }
     }
 }

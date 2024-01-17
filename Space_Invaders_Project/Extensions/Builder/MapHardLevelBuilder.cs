@@ -1,11 +1,12 @@
 ﻿using Space_Invaders_Project.Models;
+using Space_Invaders_Project.Models.Decorator;
 using System.Collections.Generic;
 
 namespace Space_Invaders_Project.Extensions.Builder
 {
     public class MapHardLevelBuilder : MapBuilder
     {
-        public List<Enemy> CreateEnemies(int level)
+        public List<IEnemy> CreateEnemies(int level)
         {
             throw new System.NotImplementedException();
         }
