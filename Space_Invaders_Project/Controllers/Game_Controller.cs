@@ -16,7 +16,7 @@ namespace Space_Invaders_Project.Controllers
     {
         private MainWindow _mainWindow;
         private MapView _mapView;
-        private List<Player_Missle> playerMissles;
+        private List<Player_Missile> playerMissles;
         private List<IEnemy> enemies;
         private Player player;
         private List<Barrier> barriers;
@@ -122,7 +122,7 @@ namespace Space_Invaders_Project.Controllers
         public void CheckForCollisions (IMissile missle)
         {
 
-        }*/
+        }
         public void SetEnemies(List<IEnemy> enemies)
         {
 

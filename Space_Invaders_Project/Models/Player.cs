@@ -14,6 +14,7 @@ namespace Space_Invaders_Project.Models
         private int health;
         private int damage;
         private float attackSpeed;
+        private int scoreMultiplier;
         private float attackVelocity;
         private float movementSpeed;
         private ImageBrush skin;
@@ -36,7 +37,6 @@ namespace Space_Invaders_Project.Models
             health = 3;
             damage = 1;
             attackSpeed = 2;
-            missileSpeed = 6;
             scoreMultiplier = 1;
             attackSpeed = 1.0f;
             attackVelocity = 1.0f;
@@ -56,9 +56,9 @@ namespace Space_Invaders_Project.Models
             return playerInstance;
         }
         // Nie wiem co to dokładnie miało na celu
-        /*public Player_Missle shootMissle()
+        /*public Player_Missile shootMissle()
         {
-            return new Player_Missle();
+            return new Player_Missile();
         }*/
 
         public void setPosition(int x, int y)
@@ -73,7 +73,7 @@ namespace Space_Invaders_Project.Models
         }
         public Player_Missile shootMissile()
         {
-            return new Player_Missile(new Point((position.X + model.Width / 2) - 2, position.Y), missileSpeed, damage);
+            return new Player_Missile(new Point((position.X + model.Width / 2) - 2, position.Y), attackVelocity, damage);
         }
         public void setBonusStrategy(Player_Bonus strategy)
         {

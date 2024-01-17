@@ -18,7 +18,7 @@ namespace Space_Invaders_Project.Models
             decoratedEnemy.SetPosition(x, y);
         }
 
-        public virtual Enemy_Missle shootMissle(int dmg, int speed)
+        public virtual Enemy_Missile shootMissle(int dmg, int speed)
         {
             return decoratedEnemy.shootMissle(dmg, speed);
         }

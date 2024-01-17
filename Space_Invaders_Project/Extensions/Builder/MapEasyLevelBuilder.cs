@@ -1,7 +1,7 @@
 ﻿using Space_Invaders_Project.Models;
 using Space_Invaders_Project.Models.Decorator;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Windows;
 using System;
 
 namespace Space_Invaders_Project.Extensions.Builder
@@ -10,7 +10,7 @@ namespace Space_Invaders_Project.Extensions.Builder
     {
         private Player player;
         private List<Barrier> barriers = new List<Barrier>();
-        private List<Enemy> enemies = new List<Enemy>();
+        private List<IEnemy> enemies = new List<IEnemy>();
         private int enemyNumber =9;
         private int basicChances = 10;
         public List<IEnemy> CreateEnemies(int level)
@@ -21,26 +21,13 @@ namespace Space_Invaders_Project.Extensions.Builder
                 enemyNumber=35;
             for(int i=0; i<enemyNumber;i++)
             {
-                Enemy enemy = new Default_Enemy();
+                IEnemy enemy = new Default_Enemy(new Point(0, 0));
                 if(Drawing(basicChances+level,random))
                 {
-                    int randomEnemy = random.Next(1,4);
-                    switch (randomEnemy)
-                    {
-                        case 1:
-                        enemies.Add(new Red_Enemy(enemy) );
-                            break;
-                        case 2:
-                         enemies.Add(new Blue_Enemy(enemy) );
-                            break;
-                        case 3:
-                         enemies.Add(new Yellow_Enemy(enemy) );
-                            break;
-                        default:
-                        enemies.Add(enemy);
-                            break;
-                    }
-                }else
+                    int numberOfDecoratorsToUse = random.Next(1, 4);
+                    enemies.Add(Default_Enemy.enemyGenerator(new Point(0, 0), numberOfDecoratorsToUse));
+                }
+                else
                     enemies.Add(enemy);
 
             }
@@ -56,8 +43,8 @@ namespace Space_Invaders_Project.Extensions.Builder
             }     
             return barriers;
         }
-       
-         private bool Drawing(int chance, Random random)
+
+        private bool Drawing(int chance, Random random)
         {
             int randomNumber = random.Next(1, 101);
 

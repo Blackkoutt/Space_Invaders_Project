@@ -12,7 +12,7 @@ namespace Space_Invaders_Project.Models.Decorator
     public interface IEnemy
     {
         public void SetPosition(int x, int y);
-        public Enemy_Missle shootMissle(int dmg, int speed);
+        public Enemy_Missile shootMissle(int dmg, int speed);
         public void setBodySkin(BitmapImage source);
         public void setArmSkin(BitmapImage source);
         public void setLegSkin(BitmapImage source);

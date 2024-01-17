@@ -12,7 +12,7 @@ namespace Space_Invaders_Project.Models
 
     public class Default_Enemy : IEnemy
     {
-        protected System.Drawing.Point position;
+        protected Point position;
         protected ImageBrush armSkin, bodySkin, legSkin;
         protected Rectangle armModel, bodyModel, legModel;
         protected Rect hitbox;
@@ -22,7 +22,7 @@ namespace Space_Invaders_Project.Models
         protected bool isDead;
 
 
-        public Default_Enemy(System.Drawing.Point position)
+        public Default_Enemy(Point position)
         {
             this.position = position;
             setBodySkin(new BitmapImage(new Uri("pack://application:,,,/Assets/baseEnemyBody.png")));
@@ -39,7 +39,7 @@ namespace Space_Invaders_Project.Models
 
         public void SetPosition(int x, int y)
         {
-            position = new System.Drawing.Point(x, y);
+            position = new Point(x, y);
         }
         public void dealDamage(Player player)
         {
@@ -93,9 +93,9 @@ namespace Space_Invaders_Project.Models
                 legModel.Fill = legSkin;
         }
 
-        public Enemy_Missle shootMissle(int dmg, int speed)
+        public Enemy_Missile shootMissle(int dmg, int speed)
         {
-            return new Enemy_Missle(position, dmg, speed);
+            return new Enemy_Missile(position, dmg, speed);
         }
 
         public void drawEnemy(Canvas canvas)
@@ -121,7 +121,7 @@ namespace Space_Invaders_Project.Models
             return new Rectangle[] { armModel, bodyModel, legModel };
         }
 
-        public static IEnemy enemyGenerator(System.Drawing.Point position, int numberOfDecorators)
+        public static IEnemy enemyGenerator(Point position, int numberOfDecorators)
         {
             if (numberOfDecorators > 3)
                 numberOfDecorators = 3;
