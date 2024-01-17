@@ -7,7 +7,6 @@ namespace Space_Invaders_Project.Extensions.Builder
     public interface MapBuilder
     {
         List<Enemy> CreateEnemies(int level);
-        Player GetPlayer();
         List<Barrier> GetBarrier();
     }
 }

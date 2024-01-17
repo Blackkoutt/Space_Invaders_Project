@@ -4,6 +4,7 @@ using Space_Invaders_Project.Extensions.Observer;
 using Space_Invaders_Project.Models;
 using Space_Invaders_Project.Views.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -26,11 +27,19 @@ namespace Space_Invaders_Project.Controllers
         // Metoda przygotowująca grę
         public void StartGame()
         {
-           // List<Enemy> enemies = builder.CreateEnemies(1); // 1 level
-           // List<Barrier> barriers = builder.GetBarrier();
+            List<Enemy> enemies = builder.CreateEnemies(1); // 1 level
+            List<Barrier> barriers = builder.GetBarrier();
             Player player = Player.getInstance();
             Size windowSize = _mapView.GetWindowSize();
             player.setPosition((int)(windowSize.Width/2 - (player.Model.Width/2)), (int)windowSize.Height - 105);
+            for(int i =0; i<enemies.Count;i++)
+            {
+
+            }
+            /*for(int i = 0; i<barriers.Count; i++)
+            {
+                barriers[i].setPosition()
+            }*/
 
             Notification notification = new Notification(_mapView);
             HighScores.AddSubscriber(notification);
