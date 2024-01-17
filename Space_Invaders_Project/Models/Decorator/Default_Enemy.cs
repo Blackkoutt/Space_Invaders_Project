@@ -1,5 +1,6 @@
 ﻿using Space_Invaders_Project.Models.Decorator;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -99,7 +100,6 @@ namespace Space_Invaders_Project.Models
 
         public void drawEnemy(Canvas canvas)
         {
-            //Najpierw body żeby było na dnie, potem reszta
             Canvas.SetTop(this.armModel, position.X);
             Canvas.SetLeft(this.armModel, position.Y);
             Canvas.SetTop(this.bodyModel, position.X);
@@ -108,9 +108,43 @@ namespace Space_Invaders_Project.Models
             Canvas.SetLeft(this.legModel, position.Y);
         }
 
+        public void addEnemyToCanvas(Canvas canvas)
+        {
+            foreach (Rectangle r in getModel())
+            {
+                canvas.Children.Add(r);
+            }
+        }
+
         public Rectangle[] getModel()
         {
             return new Rectangle[] { armModel, bodyModel, legModel };
+        }
+
+        public static IEnemy enemyGenerator(System.Drawing.Point position, int numberOfDecorators)
+        {
+            if (numberOfDecorators > 3)
+                numberOfDecorators = 3;
+            if (numberOfDecorators == 0)
+                return new Default_Enemy(position);
+
+            IEnemy enemy = new Default_Enemy(position);
+            Random rnd = new Random();
+            List<Func<IEnemy, IEnemy>> decoratorFactories = new List<Func<IEnemy, IEnemy>>
+            {
+                (e) => new HealthEnemyDecorator(e),
+                (e) => new SpeedEnemyDecorator(e),
+                (e) => new DamageEnemyDecorator(e)
+            };
+
+            for (int i = 0; i < numberOfDecorators; i++)
+            {
+                int randomIndex = rnd.Next(decoratorFactories.Count);
+                enemy = decoratorFactories[randomIndex](enemy);
+                decoratorFactories.RemoveAt(randomIndex);
+            }
+
+            return enemy;
         }
     }
 }

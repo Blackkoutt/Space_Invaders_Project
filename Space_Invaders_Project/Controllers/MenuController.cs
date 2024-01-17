@@ -41,7 +41,7 @@ namespace Space_Invaders_Project.Controllers
         
         private void HandleStartGameEvent(object? sender, EventArgs e)
         {
-            MenuView.TestEnemy((MenuView)_menuView);
+
         }
         private void HandleReturnToMenuEvent(object? sender, EventArgs e)
         {

@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
+using System.Collections.Generic;
 
 namespace Space_Invaders_Project.Views
 {
@@ -121,22 +122,6 @@ namespace Space_Invaders_Project.Views
             }
             returnToMenuButton = CreateButton(canvas.Width - 150, canvas.Height - 80, "Return");
             returnToMenuButton.Click += delegate { ReturnToMenuEvent?.Invoke(this, EventArgs.Empty); };
-        }
-        public static void TestEnemy(MenuView mw)
-        {
-            IEnemy enemy = new Default_Enemy(new System.Drawing.Point(20, 20));
-            //IEnemy enemy2 = new Default_Enemy(new System.Drawing.Point(40, 10));
-            //IEnemy enemy3 = new Default_Enemy(new System.Drawing.Point(80, 10));
-
-            IEnemy enemyDmg = new DamageEnemyDecorator(enemy);
-            IEnemy enemyDmgHp = new HealthEnemyDecorator(enemyDmg);
-            foreach (Rectangle r in enemyDmg.getModel())
-            {
-                mw.canvas.Children.Add(r);
-            }
-            enemyDmg.drawEnemy(mw.canvas);
-            //enemy2.drawEnemy(mw.canvas);
-            //enemy3.drawEnemy(mw.canvas);
         }
     }
 }
