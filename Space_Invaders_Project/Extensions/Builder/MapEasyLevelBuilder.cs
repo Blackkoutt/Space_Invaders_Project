@@ -28,19 +28,15 @@ namespace Space_Invaders_Project.Extensions.Builder
                     {
                         case 1:
                         enemies.Add(new Red_Enemy(enemy) );
-                            Console.WriteLine("Red");
                             break;
                         case 2:
                          enemies.Add(new Blue_Enemy(enemy) );
-                            Console.WriteLine("Blue");
                             break;
                         case 3:
                          enemies.Add(new Yellow_Enemy(enemy) );
-                            Console.WriteLine("Yellow");
                             break;
                         default:
                         enemies.Add(enemy);
-                            Console.WriteLine("Nieprawidłowa liczba");
                             break;
                     }
                 }else
