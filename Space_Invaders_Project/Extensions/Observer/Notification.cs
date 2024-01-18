@@ -12,6 +12,7 @@ namespace Space_Invaders_Project.Extensions.Observer
     public class Notification : ISubscriber
     {
         private IMapView _mapView;
+        private string lastNotification = "";
 
         public Notification(IMapView mapView) 
         {
@@ -20,14 +21,19 @@ namespace Space_Invaders_Project.Extensions.Observer
 
         public void Update(string name, int score,int position)
         {
+            string message = String.Format("Pokonano gracza {0}, z wynikiem {1}", HighScores.Nicks[position], HighScores.Scores[position]);
+            if (message == lastNotification)
+                return;
+
             Label label = new Label()
             {
                 Tag = "notification",
-                Content = String.Format("Pokonano gracza {0}, z wynikiem {1}", HighScores.Nicks[position], HighScores.Scores[position]),
+                Content = message,
                 Background = Brushes.DarkGray,
                 Opacity = 0.4
             };
             _mapView.AddNotification(label);
+            lastNotification = message;
         }
     }
 }

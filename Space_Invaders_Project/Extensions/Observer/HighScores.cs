@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Space_Invaders_Project.Extensions.Observer
 {
@@ -10,7 +11,7 @@ namespace Space_Invaders_Project.Extensions.Observer
         private static string[] nicks = new string[10];
         private static int[] scores = new int[10];
         private static List<ISubscriber> subscribers = new List<ISubscriber>();
-        private static string nick;
+        private static string nick = "test2";
         
         public static string[] Nicks { get { return nicks; } set { nicks = value; } }
         public static int[] Scores { get { return scores; } set { scores = value; } }
@@ -101,33 +102,14 @@ namespace Space_Invaders_Project.Extensions.Observer
         }
         public static void RemoveAllSubscribers()
         {
+            foreach (ScoreBoard subscriber in subscribers.OfType<ScoreBoard>())
+                subscriber.UpdateRealHighScores();
             subscribers.Clear();
         }
         public static string Nick 
         {
             get { return nick; } 
             set { nick = value; } 
-        }
-
-        public static void TestSC()
-        {
-            //--------------------------------------
-            HighScores.ReadFromFile();
-            HighScores.Nick = "zzzzzz";
-            ScoreBoard sc = new ScoreBoard();
-            HighScores.AddSubscriber(sc);
-            HighScores.Notification(85);
-            //--------------------------------------
-        }
-        public static void TestNF()
-        {
-            //--------------------------------------
-            HighScores.ReadFromFile();
-            HighScores.Nick = "zzzzzz";
-            //Notification nf = new Notification();
-            //HighScores.AddSubscriber(nf);
-            HighScores.Notification(85);
-            //--------------------------------------
         }
     }
 }

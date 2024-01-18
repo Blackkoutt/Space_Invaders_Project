@@ -3,6 +3,7 @@ using Space_Invaders_Project.Extensions.Builder;
 using Space_Invaders_Project.Extensions.Observer;
 using Space_Invaders_Project.Models;
 using Space_Invaders_Project.Models.Decorator;
+using Space_Invaders_Project.Models.Interfaces;
 using Space_Invaders_Project.Views;
 using Space_Invaders_Project.Views.Interfaces;
 using System;
@@ -85,9 +86,22 @@ namespace Space_Invaders_Project.Controllers
                     }
             }
         }
-        public void NextLevel(int level)
+        public int NextLevel(Game_Controller gc, int level)
         {
-            // wyczyszczenie planszy i utworzenie nowych przeciwników
+            foreach (Player_Missile pm in gc.PlayerMissiles)
+            {
+                gc.MapView.getCanvas().Children.Remove(pm.model);
+            }
+            foreach (Enemy_Missile em in gc.EnemyMissiles)
+            {
+                gc.MapView.getCanvas().Children.Remove(em.model);
+            }
+            gc.PlayerMissiles.Clear();
+            gc.EnemyMissiles.Clear();
+
+            gc.Enemies = builder.CreateEnemies(++level);
+
+            return level;
         }
     }
 }
