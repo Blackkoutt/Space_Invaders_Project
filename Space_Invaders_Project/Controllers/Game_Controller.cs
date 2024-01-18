@@ -15,7 +15,7 @@ namespace Space_Invaders_Project.Controllers
     public class Game_Controller
     {
         private MainWindow _mainWindow;
-        private MapView _mapView;
+        private IMapView _mapView;
         private List<Player_Missile> playerMissles;
         private List<IEnemy> enemies;
         private Player player;
@@ -23,13 +23,14 @@ namespace Space_Invaders_Project.Controllers
         private List<IMissile> missiles;
        // private List<Enemy_Missile> enemyMissles;
         private int level;
-        private IMapView mapView;
         private string playerMoveDirection;
         private int notificationTimer = 0;
+        private bool gamePaused = false;
+
         public Game_Controller(Player player, IMapView mapView, IGame game)
         {
             this.player = player;
-            this.mapView = mapView;
+            this._mapView = mapView;
 
             playerMoveDirection = "";
 
@@ -50,7 +51,7 @@ namespace Space_Invaders_Project.Controllers
             {
                 Player_Missile newMissile = player.shootMissile();
                 missiles.Add(newMissile);
-                mapView.SpawnMissileModel(newMissile.model, newMissile.Position);
+                _mapView.SpawnMissileModel(newMissile.model, newMissile.Position);
             }
         }
 
@@ -58,6 +59,14 @@ namespace Space_Invaders_Project.Controllers
         // Handler wciśnięcia przycisku 
         private void HandleKeyDownEvent(object? sender, KeyEventArgsWrapper e)
         {
+            if (e.Key == Key.Escape)
+            {
+                gamePaused = !gamePaused;
+                if (gamePaused)
+                    _mapView.drawPauseOverlay();
+                else
+                    _mapView.erasePauseOverlay();
+            }
             if (e.Key == Key.Left)
                 playerMoveDirection = "left";
             else if (e.Key == Key.Right)
@@ -68,6 +77,9 @@ namespace Space_Invaders_Project.Controllers
         // Główna pętla gry wykonywana przez timer z klasy Game
         private void GameLoop(object? sender, EventArgs e)
         {
+            if (gamePaused)
+                return;
+
             CheckIfNotificationToRemove();
             MoveEntities();
             DrawEntities();
@@ -78,10 +90,10 @@ namespace Space_Invaders_Project.Controllers
         // Metoda rysująca wszytskie postacie na mapie
         private void DrawEntities()
         {
-            mapView.DrawEntity(player.Model, player.Position);
+            _mapView.DrawEntity(player.Model, player.Position);
             foreach(IMissile m in missiles)
             {
-                mapView.DrawEntity(m.Model, m.Position);
+                _mapView.DrawEntity(m.Model, m.Position);
             }
             
         }
@@ -90,7 +102,7 @@ namespace Space_Invaders_Project.Controllers
         // Metoda przesuwająca gracza w zależności od wciśniętego wcześniej klawisza
         private void MovePlayer()
         {
-            if (playerMoveDirection == "right" && player.Position.X + 75 < mapView.getCanvas().Width)
+            if (playerMoveDirection == "right" && player.Position.X + 75 < _mapView.getCanvas().Width)
             {
                 player.setPosition((int)player.Position.X + 10, (int)player.Position.Y);
             }
@@ -142,7 +154,7 @@ namespace Space_Invaders_Project.Controllers
         {
             if (notificationTimer == 0)
             {
-                foreach (Label label in mapView.getCanvas().Children.OfType<Label>())
+                foreach (Label label in _mapView.getCanvas().Children.OfType<Label>())
                 {
                     if (label.Tag.ToString() == "notification")
                     {
@@ -155,7 +167,7 @@ namespace Space_Invaders_Project.Controllers
             else
                 if (notificationTimer++ > 20)
                 {
-                    mapView.RemoveNotification();
+                    _mapView.RemoveNotification();
                     notificationTimer = 0;
                 }
         }

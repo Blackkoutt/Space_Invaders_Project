@@ -116,5 +116,36 @@ namespace Space_Invaders_Project.Views
                Tag = tag
            };
         }
+
+        public void drawPauseOverlay()
+        {
+            TextBlock bcgk = new TextBlock()
+            {
+                Tag = "pause",
+                Width = canvas.Width,
+                Height = canvas.Height,
+                Text = "  Game paused",
+                Opacity = 0.4,
+                FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/#Press Start 2P"),
+                Foreground = Brushes.Green,
+                Background = Brushes.Black,
+                FontSize = 50,
+            };
+            Canvas.SetTop(bcgk, 0);
+            Canvas.SetLeft(bcgk, 0);
+            canvas.Children.Add(bcgk);
+        }
+
+        public void erasePauseOverlay()
+        {
+            foreach (TextBlock item in canvas.Children.OfType<TextBlock>())
+            {
+                if (item.Tag == "pause")
+                {
+                    canvas.Children.Remove(item);
+                    return;
+                }
+            }
+        }
     }
 }

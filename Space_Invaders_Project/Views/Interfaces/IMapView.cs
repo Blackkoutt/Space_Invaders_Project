@@ -21,5 +21,7 @@ namespace Space_Invaders_Project.Views.Interfaces
         void SpawnMissileModel(Rectangle model, Point position);
         void AddNotification(Label label);
         void RemoveNotification();
+        void drawPauseOverlay();
+        void erasePauseOverlay();
     }
 }
