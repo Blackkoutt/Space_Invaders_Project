@@ -100,6 +100,18 @@ namespace Space_Invaders_Project.Models
 
         public void drawEnemy(Canvas canvas)
         {
+            if (position.X < 0)
+            {
+                this.armModel.Visibility = Visibility.Hidden;
+                this.bodyModel.Visibility = Visibility.Hidden;
+                this.legModel.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                this.armModel.Visibility = Visibility.Visible;
+                this.bodyModel.Visibility = Visibility.Visible;
+                this.legModel.Visibility = Visibility.Visible;
+            }
             Canvas.SetTop(this.armModel, position.X);
             Canvas.SetLeft(this.armModel, position.Y);
             Canvas.SetTop(this.bodyModel, position.X);

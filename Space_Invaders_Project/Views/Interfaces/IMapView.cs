@@ -23,5 +23,6 @@ namespace Space_Invaders_Project.Views.Interfaces
         void RemoveNotification();
         void drawPauseOverlay();
         void erasePauseOverlay();
+        void UpdateScoreLabel(int score);
     }
 }

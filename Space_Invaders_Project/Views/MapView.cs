@@ -7,6 +7,7 @@ using System.Windows;
 using Space_Invaders_Project.Models;
 using System.Windows.Input;
 using System.Linq;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Space_Invaders_Project.Views
 {
@@ -32,6 +33,7 @@ namespace Space_Invaders_Project.Views
             this.canvas = canvas;
             this.mainWindow = mainWindow;
         }
+
         public void AddNotification(Label label)
         {
             Canvas.SetTop(label, 10);
@@ -39,6 +41,17 @@ namespace Space_Invaders_Project.Views
             canvas.Children.Add(label);
         }
 
+        public void UpdateScoreLabel(int score)
+        {
+            foreach (Label label in canvas.Children.OfType<Label>()) 
+            {
+                if (label.Tag.ToString() == "Score")
+                {
+                    label.Content = "Score: " + score.ToString();
+                    return;
+                }
+            }
+        }
 
         // Getter do Canvasu
         public Canvas getCanvas()
@@ -87,14 +100,12 @@ namespace Space_Invaders_Project.Views
             }
         }
 
-
-            // Metoda spawnująca model pocisku na mapie
-            public void SpawnMissileModel(Rectangle model, Point position)
+        // Metoda spawnująca model pocisku na mapie
+        public void SpawnMissileModel(Rectangle model, Point position)
         {
             DrawEntity(model, position);
             canvas.Children.Add(model);
         }
-
 
         // Główna metoda rysująca - wywoływana głównie podczas przesuwania obiektów (w każdym takcie zegara)
         public void DrawEntity(Rectangle model, Point position)

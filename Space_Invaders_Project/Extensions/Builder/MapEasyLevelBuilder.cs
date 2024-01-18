@@ -11,25 +11,25 @@ namespace Space_Invaders_Project.Extensions.Builder
         private Player player;
         private List<Barrier> barriers = new List<Barrier>();
         private List<IEnemy> enemies = new List<IEnemy>();
-        private int enemyNumber =9;
+        private int enemyNumber = 9;
         private int basicChances = 10;
         public List<IEnemy> CreateEnemies(int level)
         {
             Random random = new Random();
-             enemyNumber+=level*2;
+            int enemyXposition = 0;
+            enemyNumber+=level*2;
             if(enemyNumber>35)
                 enemyNumber=35;
             for(int i=0; i<enemyNumber;i++)
             {
-                IEnemy enemy = new Default_Enemy(new Point(0, 0));
                 if(Drawing(basicChances+level,random))
                 {
                     int numberOfDecoratorsToUse = random.Next(1, 4);
-                    enemies.Add(Default_Enemy.enemyGenerator(new Point(0, 0), numberOfDecoratorsToUse));
+                    enemies.Add(Default_Enemy.enemyGenerator(new Point(enemyXposition, 30), numberOfDecoratorsToUse));
                 }
                 else
-                    enemies.Add(enemy);
-
+                    enemies.Add(Default_Enemy.enemyGenerator(new Point(enemyXposition, 30), 0));
+                enemyXposition -= 60;
             }
             return enemies;
         }

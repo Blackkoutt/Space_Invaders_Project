@@ -16,19 +16,20 @@ namespace Space_Invaders_Project.Extensions.Builder
          public List<IEnemy> CreateEnemies(int level)
         {
             Random random = new Random();
-            enemyNumber+=level*3;
+            int enemyXposition = 0;
+            enemyNumber +=level*3;
             if(enemyNumber>40)
                 enemyNumber=40;
             for(int i=0; i<enemyNumber;i++)
             {
-                IEnemy enemy = new Default_Enemy(new Point(0 ,0));
                 if(Drawing(basicChances+(level*2),random))
                 {
                     int numberOfDecoratorsToUse = random.Next(1, 4);
-                    enemies.Add(Default_Enemy.enemyGenerator(new Point(0, 0), numberOfDecoratorsToUse));
+                    enemies.Add(Default_Enemy.enemyGenerator(new Point(enemyXposition, 30), numberOfDecoratorsToUse));
                 }
                 else
-                    enemies.Add(enemy);
+                    enemies.Add(Default_Enemy.enemyGenerator(new Point(enemyXposition, 30), 0));
+                enemyXposition -= 60;
 
             }
             return enemies;
