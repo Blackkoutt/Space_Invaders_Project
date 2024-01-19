@@ -27,19 +27,14 @@ namespace Space_Invaders_Project.Models
 
         private Player()
         {
-            // tu defaultowe wartości
-
-            // x i y zależne raczej od szerokości okna 
-            // powinny być ustawiane w controlerze w zależności od canvasu zaraz po pobraniu instancji
-            /*position = new Point(x,y)*/
 
             // Przykładowe początkowe wartości
             health = 3;
-            damage = 1;
+            damage = 10;
             attackSpeed = 2;
             scoreMultiplier = 1;
             attackSpeed = 1.0f;
-            attackVelocity = 1.0f;
+            attackVelocity = 6;
 
             skin = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/player.png")) };
             model = new Rectangle { Tag = "player", Fill = this.skin, Height = 65, Width = 55, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
@@ -55,11 +50,6 @@ namespace Space_Invaders_Project.Models
             }
             return playerInstance;
         }
-        // Nie wiem co to dokładnie miało na celu
-        /*public Player_Missile shootMissle()
-        {
-            return new Player_Missile();
-        }*/
 
         public void setPosition(int x, int y)
         {

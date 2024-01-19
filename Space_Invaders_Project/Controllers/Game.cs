@@ -8,6 +8,8 @@ using Space_Invaders_Project.Views;
 using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
+using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -18,7 +20,11 @@ namespace Space_Invaders_Project.Controllers
         private MapBuilder builder;
         private IMapView _mapView;
         private DispatcherTimer gameTimer;
+        private DispatcherTimer moveToNextLevelTimer;
         public event EventHandler GameLoopTimerEvent;
+        private Player player;
+        private Game_Controller gc;
+        private int level = 1;
 
         public Game(IMapView mapView) 
         {
@@ -30,28 +36,24 @@ namespace Space_Invaders_Project.Controllers
         // Metoda przygotowująca grę
         public void StartGame()
         {
+            // Builder
             List<IEnemy> enemies = builder.CreateEnemies(1); // 1 level
-            List<Barrier> barriers = builder.GetBarrier();
-            Player player = Player.getInstance();
+            List<DefenceBarrier> barriers = builder.GetBarrier();
+            player = Player.getInstance();
+
+            // Ustawienie początkowej pozycji gracza
             Size windowSize = _mapView.GetWindowSize();
             player.setPosition((int)(windowSize.Width/2 - (player.Model.Width/2)), (int)windowSize.Height - 105);
-            for(int i =0; i<enemies.Count;i++)
-            {
 
-            }
-            /*for(int i = 0; i<barriers.Count; i++)
-            {
-                barriers[i].setPosition()
-            }*/
-
+           
             Notification notification = new Notification(_mapView);
             HighScores.AddSubscriber(notification);
             ScoreBoard scoreBoard = new ScoreBoard();
             HighScores.AddSubscriber(scoreBoard);
 
             // Przygotowanie mapy
-            Game_Controller controller = new Game_Controller(player, _mapView, this);
-            _mapView.PrepareMap(player);
+            gc = new Game_Controller(player, _mapView, enemies, barriers, this);
+            _mapView.PrepareMap(player, enemies);
 
             // Uruchomienie Timera który co 20 milisekund wykonuje główną pętlę gry
             gameTimer.Tick += delegate { GameLoopTimerEvent?.Invoke(this, EventArgs.Empty); };
@@ -86,22 +88,42 @@ namespace Space_Invaders_Project.Controllers
                     }
             }
         }
-        public int NextLevel(Game_Controller gc, int level)
+        public void NextLevel()
         {
-            foreach (Player_Missile pm in gc.PlayerMissiles)
-            {
-                gc.MapView.getCanvas().Children.Remove(pm.model);
-            }
-            foreach (Enemy_Missile em in gc.EnemyMissiles)
-            {
-                gc.MapView.getCanvas().Children.Remove(em.model);
-            }
-            gc.PlayerMissiles.Clear();
-            gc.EnemyMissiles.Clear();
+            gameTimer.Stop();
+            moveToNextLevelTimer = new DispatcherTimer();
+            moveToNextLevelTimer.Tick += MovePlayerToNextLevel;
+            moveToNextLevelTimer.Interval = TimeSpan.FromMilliseconds(15);
+            moveToNextLevelTimer.Start();
+        }
+        private void SetNextLevel()
+        {
+            Size windowSize = _mapView.GetWindowSize();
+            player.setPosition((int)(windowSize.Width / 2 - (player.Model.Width / 2)), (int)windowSize.Height - 105);
 
-            gc.Enemies = builder.CreateEnemies(++level);
+            foreach (IMissile missile in gc.Missiles)
+            {
+                _mapView.RemoveEntity(missile.Model);
+            }
+            gc.Missiles.Clear();
 
-            return level;
+
+            List<IEnemy> enemies = builder.CreateEnemies(++level);
+            gc.Enemies = enemies;
+            _mapView.PrepareNextLevel(enemies);
+            gameTimer.Start();
+        }
+        private void MovePlayerToNextLevel(object? sender, EventArgs e)
+        {
+            if (player.Position.Y <= 0 - player.Model.Height)
+            {
+                moveToNextLevelTimer.Stop();
+                SetNextLevel();
+                return;
+            }
+
+            player.setPosition((int)player.Position.X, (int)player.Position.Y - 10);
+            _mapView.DrawEntity(player.Model, player.Position);
         }
     }
 }

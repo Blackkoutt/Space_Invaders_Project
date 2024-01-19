@@ -86,8 +86,8 @@ namespace Space_Invaders_Project.Views
         private void setUpCanvas()
         {
             canvas = new Canvas();
-            canvas.Height = 500;
-            canvas.Width = 800;
+            canvas.Height = 600;
+            canvas.Width = 1000; //800
             canvas.Background = new SolidColorBrush(Colors.Transparent);
             _mainWindow.Content = canvas;
         }

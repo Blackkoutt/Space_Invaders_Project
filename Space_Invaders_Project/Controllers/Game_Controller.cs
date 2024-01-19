@@ -8,9 +8,12 @@ using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace Space_Invaders_Project.Controllers
 {
@@ -20,32 +23,50 @@ namespace Space_Invaders_Project.Controllers
         private IMapView _mapView;
         private IGame gameFacade;
         private Player player;
-        private List<Player_Missile> playerMissles = new List<Player_Missile>();
-        private List<IEnemy> enemies = new List<IEnemy>();
-        private List<Barrier> barriers = new List<Barrier>();
-        private List<IMissile> enemyMissiles = new List<IMissile>();
+        //private List<Player_Missile> playerMissles = new List<Player_Missile>();
+        private List<IEnemy> enemies;
+        private List<DefenceBarrier> barriers;
+        private List<IMissile> missiles;
        // private List<Enemy_Missile> enemyMissles;
-        private int level = 1;
+        
         private string playerMoveDirection = "";
+        private string enemyMoveDirection = "right";
         private int notificationTimer = 0;
         private bool gamePaused = false;
+        //private int bulletTimer = 90;
+       // private int defaultBulletTimer = 90;
+        private DispatcherTimer bulletTimer;
 
-        public Game_Controller(Player player, IMapView mapView, IGame game)
+        public Game_Controller(Player player, IMapView mapView, List<IEnemy> enemies, List<DefenceBarrier> barriers, IGame game)
         {
             this.player = player;
             this._mapView = mapView;
             this.gameFacade = game;
+            this.enemies = enemies;
+            this.barriers = barriers;
+
+            missiles = new List<IMissile>();
 
             game.GameLoopTimerEvent += GameLoop;
             mapView.KeyDownEvent += HandleKeyDownEvent;
             mapView.KeyUpEvent += HandleKeyUpEvent;
 
+            bulletTimer = new DispatcherTimer();
+            bulletTimer.Tick += RandomEnemyShotMissle;
+            bulletTimer.Interval = TimeSpan.FromMilliseconds(1000);
+            bulletTimer.Start();
         }
 
-        public IMapView MapView { get { return _mapView; } }
-        public List<Player_Missile> PlayerMissiles { get { return playerMissles; } }
-        public List<IEnemy> Enemies { get {  return enemies; } set { enemies = value; } }
-        public List<IMissile > EnemyMissiles { get { return enemyMissiles; } }
+        public List<IEnemy> Enemies 
+        {
+            get {  return enemies; }
+            set { enemies = value; } 
+        }
+        public List<IMissile> Missiles
+        {
+            get { return missiles; }
+            set { missiles = value; }
+        }
 
 
         // Handler puszczenia przycisku 
@@ -56,7 +77,7 @@ namespace Space_Invaders_Project.Controllers
             if (e.Key == Key.Space && !gamePaused)
             {
                 Player_Missile newMissile = player.shootMissile();
-                enemyMissiles.Add(newMissile);
+                missiles.Add(newMissile);
                 _mapView.SpawnMissileModel(newMissile.model, newMissile.Position);
             }
         }
@@ -69,9 +90,16 @@ namespace Space_Invaders_Project.Controllers
             {
                 gamePaused = !gamePaused;
                 if (gamePaused)
+                {
                     _mapView.drawPauseOverlay();
+                    bulletTimer.Stop();
+                }
                 else
+                {
                     _mapView.erasePauseOverlay();
+                    bulletTimer.Start();
+                }
+                    
             }
             if (e.Key == Key.Left)
                 playerMoveDirection = "left";
@@ -87,26 +115,42 @@ namespace Space_Invaders_Project.Controllers
                 return;
 
             if (enemies.Count == 0)
-                level = gameFacade.NextLevel(this, level);
-
+                gameFacade.NextLevel();
             
-            UpdateOverlay();
             MoveEntities();
+            CheckForCollisions();
+
             DrawEntities();
+            UpdateOverlay();             
         }
 
+        private void RandomEnemyShotMissle(object? sender, EventArgs e)
+        {
+            if (enemies.Any())
+            {
+                Random random = new Random();
+                int howManyEnemiesShot = random.Next(1, enemies.Count + 1);
+                for (int i = 0; i < howManyEnemiesShot; i++)
+                {
+                    int wichEnemyWillShot = random.Next(0, enemies.Count);
+                    Enemy_Missile newMissile = enemies[wichEnemyWillShot].shootMissile();
+                    missiles.Add(newMissile);
+                    _mapView.SpawnMissileModel(newMissile.model, newMissile.Position);
+                }
+            }  
+        }
 
         // Metoda rysująca wszytskie postacie na mapie
         private void DrawEntities()
         {
             _mapView.DrawEntity(player.Model, player.Position);
-            foreach(IMissile m in enemyMissiles)
+            foreach(IMissile m in missiles)
             {
                 _mapView.DrawEntity(m.Model, m.Position);
             }
-            foreach(IEnemy m in enemies)
+            foreach(IEnemy enemy in enemies)
             {
-                m.drawEnemy(_mapView.getCanvas());
+                _mapView.DrawEnemy(enemy);
             }
             
         }
@@ -137,16 +181,105 @@ namespace Space_Invaders_Project.Controllers
         private void MoveEntities()
         {
             MovePlayer();
-            foreach(IMissile m in enemyMissiles)
+            foreach(IMissile m in missiles)
             {
                 MoveMissile(m);
+            }
+            if (enemies.Any())
+            {
+                CheckIfEnemyOnEdge();
+                foreach (IEnemy e in enemies)
+                {
+                    MoveEnemy(e);
+                }
+            }
+            
+        }
+        private void MoveEnemy(IEnemy enemy)
+        {
+            if(enemyMoveDirection == "right")
+            {
+                enemy.SetPosition((int)enemy.Position.X + 4, (int)enemy.Position.Y);
+            }
+            else
+            {
+                enemy.SetPosition((int)enemy.Position.X - 4, (int)enemy.Position.Y);
+            }
+        }
+        private void CheckIfEnemyOnEdge()
+        {
+            if (enemyMoveDirection == "right")
+            {
+                if (enemies[0].Position.X + 55 >= _mapView.GetWindowSize().Width)
+                {
+                    enemyMoveDirection = "left";
+                    foreach (IEnemy e in enemies)
+                    {
+                        e.SetPosition((int)e.Position.X, (int)e.Position.Y + 20);
+                    }
+                }
+            }
+            else
+            {
+                if (enemies[enemies.Count-1].Position.X - 10 < 0)
+                {
+                    enemyMoveDirection = "right";
+                    foreach (IEnemy e in enemies)
+                    {
+                        e.SetPosition((int)e.Position.X, (int)e.Position.Y + 20);
+                    }
+                }
             }
         }
 
 
-        public void CheckForCollisions (IMissile missle)
+        private void CheckForCollisions()
         {
-
+            foreach(IEnemy enemy in enemies)
+            {
+                foreach(IMissile missile in missiles)
+                {
+                    if(missile is Player_Missile && enemy.Hitbox.IntersectsWith(missile.Hitbox))
+                    {
+                        enemy.dealDamage(player);
+                        missiles.Remove(missile);
+                        _mapView.RemoveEntity(missile.Model);
+                        break;
+                    }
+                }
+                if (enemy.IsDead)
+                {
+                    // add score
+                    enemies.Remove(enemy);
+                    _mapView.RemoveEntity(enemy.ArmModel);
+                    _mapView.RemoveEntity(enemy.BodyModel);
+                    _mapView.RemoveEntity(enemy.LegModel);
+                    break;
+                }
+            }
+            foreach (IMissile missile in missiles)
+            {
+                if (missile is Player_Missile && missile.Position.Y < 0)
+                {
+                    missiles.Remove(missile);
+                    _mapView.RemoveEntity(missile.Model);
+                    break;
+                }
+                if (missile is Enemy_Missile && missile.Position.Y > _mapView.GetWindowSize().Height)
+                {
+                    missiles.Remove(missile);
+                    _mapView.RemoveEntity(missile.Model);
+                    break;
+                }
+                if (missile is Enemy_Missile && missile.Hitbox.IntersectsWith(player.Hitbox))
+                {
+                    //player.dealDamage(1);
+                    player.Health = player.Health - missile.Damage;
+                    missiles.Remove(missile);
+                    _mapView.RemoveEntity(missile.Model);
+                    break;
+                }
+            }
         }
         public void SetEnemies(List<IEnemy> enemies)
         {
@@ -156,7 +289,7 @@ namespace Space_Invaders_Project.Controllers
         {
 
         }
-        public void SetBarrier(List<Barrier> barrier) 
+        public void SetBarrier(List<DefenceBarrier> barrier) 
         {
         }
         public void MissleControl()

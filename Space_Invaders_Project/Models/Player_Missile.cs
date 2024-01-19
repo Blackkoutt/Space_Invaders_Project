@@ -38,10 +38,14 @@ namespace Space_Invaders_Project.Models
         {
             get { return this.model; }
         }
+        public Rect Hitbox
+        {
+            get { return hitbox; }
+        }
         public void setPosition(float y)
         {
             position = new Point(position.X, position.Y-y);
-            hitbox.Y = y;
+            hitbox.Y = position.Y;
         }
     }
 }

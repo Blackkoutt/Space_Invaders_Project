@@ -9,9 +9,9 @@ namespace Space_Invaders_Project.Extensions.Builder
     public class MapEasyLevelBuilder : MapBuilder
     {
         private Player player;
-        private List<Barrier> barriers = new List<Barrier>();
+        private List<DefenceBarrier> barriers = new List<DefenceBarrier>();
         private List<IEnemy> enemies = new List<IEnemy>();
-        private int enemyNumber = 9;
+        private int enemyNumber = 5;
         private int basicChances = 10;
         public List<IEnemy> CreateEnemies(int level)
         {
@@ -35,11 +35,11 @@ namespace Space_Invaders_Project.Extensions.Builder
         }
 
         // Utworzenie danej ilości barier i ustawienie ich pozycji
-        public List<Barrier> GetBarrier()
+        public List<DefenceBarrier> GetBarrier()
         {
             for(int i=0; i<3; i++)
             {
-                barriers.Add(new Barrier());  
+                barriers.Add(new DefenceBarrier());  
             }     
             return barriers;
         }

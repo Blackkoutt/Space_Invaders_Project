@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Shapes;
 
 namespace Space_Invaders_Project.Models.Interfaces
@@ -10,5 +11,6 @@ namespace Space_Invaders_Project.Models.Interfaces
         void setPosition(float y);
         float Speed { get; }
         Rectangle Model { get; }
+        Rect Hitbox { get; }
     }
 }

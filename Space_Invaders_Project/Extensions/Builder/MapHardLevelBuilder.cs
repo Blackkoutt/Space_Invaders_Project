@@ -10,7 +10,7 @@ namespace Space_Invaders_Project.Extensions.Builder
     {
          private Player player;
          private List<IEnemy> enemies = new List<IEnemy>();
-         List<Barrier> barriers = new List<Barrier>();
+         List<DefenceBarrier> barriers = new List<DefenceBarrier>();
          private int enemyNumber =19;
          private int basicChances = 40;
         public List<IEnemy> CreateEnemies(int level)
@@ -34,7 +34,7 @@ namespace Space_Invaders_Project.Extensions.Builder
             return enemies;
         }
 
-        public List<Barrier> GetBarrier()
+        public List<DefenceBarrier> GetBarrier()
         {
            return barriers;
         }

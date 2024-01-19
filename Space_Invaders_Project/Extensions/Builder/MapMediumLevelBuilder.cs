@@ -9,9 +9,9 @@ namespace Space_Invaders_Project.Extensions.Builder
     public class MapMediumLevelBuilder : MapBuilder
     {
          private Player player;
-         List<Barrier> barriers = new List<Barrier>();
+         List<DefenceBarrier> barriers = new List<DefenceBarrier>();
          private List<IEnemy> enemies = new List<IEnemy>();
-         private int enemyNumber =14;
+         private int enemyNumber =11;
          private int basicChances = 20;
          public List<IEnemy> CreateEnemies(int level)
         {
@@ -35,9 +35,9 @@ namespace Space_Invaders_Project.Extensions.Builder
             return enemies;
         }
 
-       public List<Barrier> GetBarrier()
+       public List<DefenceBarrier> GetBarrier()
        {
-            barriers.Add(new Barrier());        
+            barriers.Add(new DefenceBarrier());        
             return barriers;
         }         
          private bool Drawing(int chance, Random random)

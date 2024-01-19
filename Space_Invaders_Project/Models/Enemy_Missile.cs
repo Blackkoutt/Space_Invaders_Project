@@ -37,16 +37,15 @@ namespace Space_Invaders_Project.Models
         {
             get { return  damage; }
         }
-
-        // Nie pamiętam jak to dokładnie miało działać ;/
-        public void move()
+        public Rect Hitbox 
         {
-            throw new System.NotImplementedException();
+            get { return hitbox; }
         }
 
         public void setPosition(float y)
         {
-            throw new System.NotImplementedException();
+            position = new Point(position.X, position.Y + y);
+            hitbox.Y = position.Y;
         }
     }
 }

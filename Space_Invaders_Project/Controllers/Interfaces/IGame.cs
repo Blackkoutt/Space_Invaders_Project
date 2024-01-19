@@ -6,7 +6,7 @@ namespace Space_Invaders_Project.Controllers.Interfaces
     {
         event EventHandler GameLoopTimerEvent;
 
-        int NextLevel(Game_Controller gc, int level);
+        void NextLevel();
         void GameOver();
     }
 }
