@@ -1,6 +1,5 @@
 ﻿using Space_Invaders_Project.Models.Decorator;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -50,9 +49,9 @@ namespace Space_Invaders_Project.Models
             return decoratedEnemy.shootMissile();
         }
 
-        public virtual void dealDamage(Player player)
+        public virtual void dealDamage(int playerDamage)
         {
-            decoratedEnemy.dealDamage(player);
+            decoratedEnemy.dealDamage(playerDamage);
         }
 
         public virtual void onDeath()

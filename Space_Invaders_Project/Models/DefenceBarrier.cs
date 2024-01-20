@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Automation;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -17,10 +16,16 @@ namespace Space_Invaders_Project.Models
             health = 3;
             MapHealthToModel();
         }
+
+
+        // Metoda ustawiająca pozycję bariery
         public void setPosition(Point position)
         {
             this.position = position;
         }
+
+
+        // Metoda mapująca HP bariery na model
         public void MapHealthToModel()
         {
             switch (health)
@@ -42,12 +47,14 @@ namespace Space_Invaders_Project.Models
                     }
                 default:
                     {
-                        // wtedy trzeba usunąć bariere z listy i usunać ją z widoku
-                        // można w sumie dać np czarnyImageBrush o takich samyych wymiarach ale to się zobaczy
+
                         break;
                     }
             }
         }
+
+
+        // Gettery i settery
         public int Health
         {
             get {return health;}

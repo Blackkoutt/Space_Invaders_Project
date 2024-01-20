@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -53,17 +52,16 @@ namespace Space_Invaders_Project.Models
             hitbox.X = x;
             hitbox.Y = y;
         }
-        public void dealDamage(Player player)
+        public void dealDamage(int playerDamage)
         {
-            health -= player.Damage;
-            if (health == 0)
+            health -= playerDamage;
+            if (health <= 0)
                 onDeath();
         }
 
         public void onDeath()
         {
             isDead = true;
-            //player.addScore();
         }
 
         public void setAttackVelocity(int atv)

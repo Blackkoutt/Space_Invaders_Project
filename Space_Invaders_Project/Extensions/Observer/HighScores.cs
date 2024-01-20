@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Space_Invaders_Project.Extensions.Observer
 {
@@ -15,6 +14,8 @@ namespace Space_Invaders_Project.Extensions.Observer
 
         public HighScores() { } 
 
+
+        // Metoda zapisująca tablice wyników do pliku
         public void SaveToFile()
         {
             string fileName = "highscores.txt";
@@ -27,7 +28,8 @@ namespace Space_Invaders_Project.Extensions.Observer
             sw.Close();
         }
 
-        //throw Exceptions
+
+        // Metoda odczytująca tablicę wyników z pliku - wyrzuca wyjątki w przypadku błędów związanych z odczytem
         public void ReadFromFile()
         {
             StreamReader sr;
@@ -78,6 +80,9 @@ namespace Space_Invaders_Project.Extensions.Observer
             }
             sr.Close();
         }
+
+
+        // Metoda informująca subskrybentów o zmianie stanu
         public void Notification(int score)
         {
             for (int i = 0; i < scoresList.Count; i++)
@@ -92,18 +97,30 @@ namespace Space_Invaders_Project.Extensions.Observer
                 }
             }
         }
+
+
+        // Metoda dodająca subskrybenta
         public void AddSubscriber(ISubscriber s)
         {
             subscribers.Add(s);
         }
+
+
+        // Metoda usuwająca subskrybenta
         public void RemoveSubscriber(ISubscriber s)
         {
             subscribers.Remove(s);
         }
+
+
+        // Metoda usuwająca wszytskich subskrybentów
         public void RemoveAllSubscribers()
         {
             subscribers.Clear();
         }
+
+
+        // Gettery i settery
         public List<string> NickList
         {
             get { return nicksList; }

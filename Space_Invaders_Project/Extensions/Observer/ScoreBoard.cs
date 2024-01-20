@@ -5,6 +5,9 @@ namespace Space_Invaders_Project.Extensions.Observer
     public class ScoreBoard : ISubscriber
     {
         public ScoreBoard() { } 
+
+
+        // Metoda aktualizująca tablicę wyników w czasie rzeczywistym 
         public void Update(string name, int score, int position, ref List<string> nicks, ref List<int> scores)
         {
             nicks.Insert(position, name);

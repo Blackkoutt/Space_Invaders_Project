@@ -8,7 +8,7 @@ namespace Space_Invaders_Project.Extensions.Strategy
         public DamageDealtBonus() { }
         public override void admitBonus(Player player)
         {
-            player.Damage = 120; // przykładowa wartość
+            player.Damage = 120;
         }
     }
 }

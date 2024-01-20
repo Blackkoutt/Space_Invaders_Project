@@ -16,6 +16,8 @@ namespace Space_Invaders_Project.Extensions.Observer
             _mapView = mapView;
         }
 
+        
+        // Metoda tworząca powiadomienie o pobiciu wyniku danego gracza
         public void Update(string name, int score,int position, ref List<string> nicks, ref List<int> scores)
         {
             if(name != nicks[position])

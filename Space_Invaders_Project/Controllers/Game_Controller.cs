@@ -15,7 +15,6 @@ namespace Space_Invaders_Project.Controllers
 {
     public class Game_Controller
     {
-        private MainWindow _mainWindow;
         private IMapView _mapView;
         private IGame gameFacade;
         private Player player;
@@ -39,16 +38,22 @@ namespace Space_Invaders_Project.Controllers
 
             missiles = new List<IMissile>();
 
+            // Dodanie obsługi eventu timera gameTimer z Fasady
             game.GameLoopTimerEvent += GameLoop;
+
+            // Dodanie obsługi wciśnięcia przycisków na klawiaturze
             mapView.KeyDownEvent += HandleKeyDownEvent;
             mapView.KeyUpEvent += HandleKeyUpEvent;
 
+            // Dodanie timera do odliczania czasu między kolejnymi strzałami przeciwników
             bulletTimer = new DispatcherTimer();
             bulletTimer.Tick += RandomEnemyShotMissle;
             bulletTimer.Interval = TimeSpan.FromMilliseconds(1000);
             bulletTimer.Start();
         }
 
+
+        // Gettery do list
         public List<IEnemy> Enemies 
         {
             get {  return enemies; }
@@ -64,8 +69,11 @@ namespace Space_Invaders_Project.Controllers
         // Handler puszczenia przycisku 
         private void HandleKeyUpEvent(object? sender, KeyEventArgsWrapper e)
         {
+            // Gracz się nie porusza
             if (e.Key == Key.Left || e.Key == Key.Right)
                 playerMoveDirection = "";
+
+            // Strzał gracza 
             if (e.Key == Key.Space && !gamePaused)
             {
                 Player_Missile newMissile = player.shootMissile();
@@ -78,6 +86,7 @@ namespace Space_Invaders_Project.Controllers
         // Handler wciśnięcia przycisku 
         private void HandleKeyDownEvent(object? sender, KeyEventArgsWrapper e)
         {
+            // Pauza lub wznowienie gry
             if (e.Key == Key.Escape)
             {
                 gamePaused = !gamePaused;
@@ -93,6 +102,8 @@ namespace Space_Invaders_Project.Controllers
                 }
                     
             }
+
+            // Ustawienie kierunku poruszania sie gracza
             if (e.Key == Key.Left)
                 playerMoveDirection = "left";
             else if (e.Key == Key.Right)
@@ -107,23 +118,34 @@ namespace Space_Invaders_Project.Controllers
                 return;
 
             if (enemies.Count == 0)
-                gameFacade.NextLevel();
+                gameFacade.NextLevel(); // Następny poziom
             
-            MoveEntities();
-            CheckForCollisions();
+            MoveEntities(); // Przesunięcie elementów na mapie
+            CheckForCollisions();   // Wykrycie kolizji
 
-            DrawEntities();
-            UpdateOverlay();             
+            DrawEntities(); // Rysowanie elementów na mapie (po przesunięciu)
+            UpdateOverlay();    // Zaktualizowanie paska z wynikiem
+
+            // Jeśli gracz zginął to oznacza to koniec gry
+            if (player.IsDeath)
+            {
+                bulletTimer.Stop();
+                bulletTimer.Tick -= RandomEnemyShotMissle;
+                gameFacade.GameOver();
+            }
         }
 
+
+        // Metoda generująca losową ilość pocisków przeciwników w każdym takcie zegara bulletTimer
         private void RandomEnemyShotMissle(object? sender, EventArgs e)
         {
             if (enemies.Any())
             {
                 Random random = new Random();
-                int howManyEnemiesShot = random.Next(1, enemies.Count + 1);
+                int howManyEnemiesShot = random.Next(1, enemies.Count + 1); // Ile przeciwników ma strzelić
                 for (int i = 0; i < howManyEnemiesShot; i++)
                 {
+                    // Który przeciwnik ma strzelić
                     int wichEnemyWillShot = random.Next(0, enemies.Count);
                     Enemy_Missile newMissile = enemies[wichEnemyWillShot].shootMissile();
                     missiles.Add(newMissile);
@@ -132,19 +154,24 @@ namespace Space_Invaders_Project.Controllers
             }  
         }
 
+
         // Metoda rysująca wszytskie postacie na mapie
         private void DrawEntities()
         {
+            // Rysowanie gracza
             _mapView.DrawEntity(player.Model, player.Position);
+
+            // Rysowanie pocisków
             foreach(IMissile m in missiles)
             {
                 _mapView.DrawEntity(m.Model, m.Position);
             }
+
+            // Rysowanie przeciwników
             foreach(IEnemy enemy in enemies)
             {
                 _mapView.DrawEnemy(enemy);
-            }
-            
+            }          
         }
 
 
@@ -184,9 +211,11 @@ namespace Space_Invaders_Project.Controllers
                 {
                     MoveEnemy(e);
                 }
-            }
-            
+            }            
         }
+
+
+        // Metoda przesuwająca danego przeciwnika
         private void MoveEnemy(IEnemy enemy)
         {
             if(enemyMoveDirection == "right")
@@ -198,6 +227,9 @@ namespace Space_Invaders_Project.Controllers
                 enemy.SetPosition((int)enemy.Position.X - 4, (int)enemy.Position.Y);
             }
         }
+
+        // Metoda sprawdzająca czy przecinwik znajduje się na krawędzi canvasu (jeśli tak to wszytskim przeciwnikom zmienia się kierunek
+        // i są oni przesuwani o jeden "wiersz" w dół mapy)
         private void CheckIfEnemyOnEdge()
         {
             if (enemyMoveDirection == "right")
@@ -225,26 +257,37 @@ namespace Space_Invaders_Project.Controllers
         }
 
 
+        // Metoda wykrywająca kolizje 
         private void CheckForCollisions()
         {
+            // Wykrycie kolizji pocisku gracza z przeciwnikiem
             foreach(IEnemy enemy in enemies)
             {
                 foreach(IMissile missile in missiles)
                 {
                     if(missile is Player_Missile && enemy.Hitbox.IntersectsWith(missile.Hitbox))
                     {
-                        enemy.dealDamage(player);
-                        player.addScore();
-                        gameFacade.HighScores.Notification(player.Score);
-
-                        missiles.Remove(missile);
+                        enemy.dealDamage(player.Damage);    // Przeciwnik otrzymuje damage                  
+                        missiles.Remove(missile);   // Pocisk gracza jest usuwany
                         _mapView.RemoveEntity(missile.Model);
                         break;
                     }
                 }
+
+                // Wykrycie kolizji przeciwnika z graczem
+                if (enemy.Hitbox.IntersectsWith(player.Hitbox))
+                {
+                    player.IsDeath = true; // Gracz od razy ginie 
+                }
+
+
+                // Przeciwnik zginął
                 if (enemy.IsDead)
                 {
-                    // add score
+                    player.addScore();  // Gracz dostaje punkt 
+                    gameFacade.HighScores.Notification(player.Score);   // Powiadomienie subskrybentów o zmianie stanu
+
+                    // Usunięcie przeciwnika
                     enemies.Remove(enemy);
                     _mapView.RemoveEntity(enemy.ArmModel);
                     _mapView.RemoveEntity(enemy.BodyModel);
@@ -252,50 +295,47 @@ namespace Space_Invaders_Project.Controllers
                     break;
                 }
             }
+
             foreach (IMissile missile in missiles)
             {
+                // Wykrycie kolizji pocisku gracza z górną granicą canvasu
                 if (missile is Player_Missile && missile.Position.Y < 0)
                 {
                     missiles.Remove(missile);
                     _mapView.RemoveEntity(missile.Model);
                     break;
                 }
+
+                // Wykrycie kolizji pocisku przeciwika z dolną granicą canvasu
                 if (missile is Enemy_Missile && missile.Position.Y > _mapView.GetWindowSize().Height)
                 {
                     missiles.Remove(missile);
                     _mapView.RemoveEntity(missile.Model);
                     break;
                 }
+
+                // Wykrycie kolizji pocisku przeciwnika z graczem
                 if (missile is Enemy_Missile && missile.Hitbox.IntersectsWith(player.Hitbox))
                 {
-                    //player.dealDamage(1);
-                    player.Health = player.Health - missile.Damage;
+                    player.dealDamage(missile.Damage); // Gracz dostaje damage zależny od damage posicku przeciwnika
+                    
+                    // Pocisk przeciwnika zostaje usunięty
                     missiles.Remove(missile);
                     _mapView.RemoveEntity(missile.Model);
                     break;
                 }
             }
         }
-        public void SetEnemies(List<IEnemy> enemies)
-        {
 
-        }
-        public void SetPlayer(Player player)
-        {
-
-        }
-        public void SetBarrier(List<DefenceBarrier> barrier) 
-        {
-        }
-        public void MissleControl()
-        {
-
-        }
+        // Metoda aktualizująca górny pasek z wynikiem
         private void UpdateOverlay()
         {
             CheckIfNotificationToRemove();
             _mapView.UpdateScoreLabel(player.Score);
         }
+
+
+        // Metoda usuwająca powiadomienie o pobiciu wyniku danego gracza
         private void CheckIfNotificationToRemove()
         {
             if (notificationTimer == 0)
@@ -311,11 +351,13 @@ namespace Space_Invaders_Project.Controllers
                     
             }
             else
+            {
                 if (notificationTimer++ > 50)
                 {
                     _mapView.RemoveNotification();
                     notificationTimer = 0;
                 }
+            }
         }
     }
 }

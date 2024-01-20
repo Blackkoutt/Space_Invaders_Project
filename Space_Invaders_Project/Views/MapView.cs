@@ -7,10 +7,8 @@ using System.Windows;
 using Space_Invaders_Project.Models;
 using System.Windows.Input;
 using System.Linq;
-using static System.Formats.Asn1.AsnWriter;
 using Space_Invaders_Project.Models.Decorator;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Windows.Media.Imaging;
 
 namespace Space_Invaders_Project.Views
@@ -38,6 +36,8 @@ namespace Space_Invaders_Project.Views
             this.mainWindow = mainWindow;
         }
 
+
+        // Metoda dodająca w wiodoku mapy powiadomienie o pokonaniu danego gracza
         public void AddNotification(Label label)
         {
             Canvas.SetTop(label, 10);
@@ -45,6 +45,8 @@ namespace Space_Invaders_Project.Views
             canvas.Children.Add(label);
         }
 
+
+        // Metoda aktualizująca wynik gracza na mapie
         public void UpdateScoreLabel(int score)
         {
             foreach (Label label in canvas.Children.OfType<Label>()) 
@@ -56,6 +58,7 @@ namespace Space_Invaders_Project.Views
                 }
             }
         }
+
 
         // Getter do Canvasu
         public Canvas getCanvas()
@@ -71,7 +74,7 @@ namespace Space_Invaders_Project.Views
         }
 
 
-        // Metoda przygotowująca mapę
+        // Metoda przygotowująca mapę na kolejny poziom
         public void PrepareNextLevel(List<IEnemy> enemies)
         {
             foreach (IEnemy enemy in enemies)
@@ -82,18 +85,24 @@ namespace Space_Invaders_Project.Views
                 canvas.Children.Add(enemy.LegModel);
             }
         }
+
+
+        // Metoda przygotowująca mapę przy inicjalizacji gry
         public void PrepareMap(Player player, List<IEnemy> enemies)
         {
             canvas.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/background_game.jpg")) };
+            
+            // Narysuj label z wynikiem
             Label scoreLabel = CreateLabel($"Score: {0}", "Score");
             Canvas.SetLeft(scoreLabel, 0);
             Canvas.SetTop(scoreLabel, 0);
             canvas.Children.Add(scoreLabel);
 
+            // Narysuj gracza
             DrawEntity(player.Model, player.Position);
             canvas.Children.Add(player.Model);
 
-            //SpawnEnemies(enemies);
+            // Narysuj przeciwników
             foreach (IEnemy enemy in enemies)
             {
                 DrawEnemy(enemy);
@@ -102,6 +111,7 @@ namespace Space_Invaders_Project.Views
                 canvas.Children.Add(enemy.LegModel);
             }
 
+            // Podepnij zdarzenia do mainWindow (przycisk wciśnięty i przycisk puszczony) - obsługa w Game_Controller
             mainWindow.KeyDown += (sender, e) =>
             {
                 KeyDownEvent?.Invoke(this, new KeyEventArgsWrapper(e.Key));
@@ -113,6 +123,8 @@ namespace Space_Invaders_Project.Views
             };
         }
 
+
+        // Metoda rysująca pojedynczego przeciwnika na mapie
         public void DrawEnemy(IEnemy enemy)
         {
             SetEnemyVisibility(enemy);
@@ -121,6 +133,8 @@ namespace Space_Invaders_Project.Views
             DrawEntity(enemy.LegModel, enemy.Position);
         }
 
+
+        // Metoda ustawiająca widoczność przeciwnika
         private void SetEnemyVisibility(IEnemy enemy)
         {
             if (enemy.Position.X < 0)
@@ -137,6 +151,27 @@ namespace Space_Invaders_Project.Views
             }
         }
 
+
+        // Metoda usuwająca wszystkie elementy mapy i eventy poruszania się gracza
+        public void RemoveAllEntitiesAndEvents()
+        {
+            // Odepnij zdarzenia od mainWindow
+            mainWindow.KeyDown -= (sender, e) =>
+            {
+                KeyDownEvent?.Invoke(this, new KeyEventArgsWrapper(e.Key));
+            };
+
+            mainWindow.KeyUp -= (sender, e) =>
+            {
+                KeyUpEvent?.Invoke(this, new KeyEventArgsWrapper(e.Key));
+            };
+
+            // Wyczyść widok
+            canvas.Children.Clear();
+        }
+
+
+        // Metoda usuwająca z widoku powiadomienie o pobiciu wyniku danego gracza
         public void RemoveNotification()
         {
             foreach (Label label in canvas.Children.OfType<Label>())
@@ -149,6 +184,7 @@ namespace Space_Invaders_Project.Views
             }
         }
 
+
         // Metoda spawnująca model pocisku na mapie
         public void SpawnMissileModel(Rectangle model, Point position)
         {
@@ -156,7 +192,8 @@ namespace Space_Invaders_Project.Views
             canvas.Children.Add(model);
         }
 
-        // Główna metoda rysująca - wywoływana głównie podczas przesuwania obiektów (w każdym takcie zegara)
+
+        // Główna metoda rysująca - wywoływana głównie podczas przesuwania obiektów (w każdym takcie zegara gameTimer w Game_Controller)
         public void DrawEntity(Rectangle model, Point position)
         {
             Canvas.SetLeft(model, position.X);
@@ -164,6 +201,8 @@ namespace Space_Invaders_Project.Views
             Canvas.SetTop(model, position.Y);           
         }
 
+
+        // Metoda usuwająca pojedynczy element mapy 
         public void RemoveEntity(Rectangle model)
         {
             canvas.Children.Remove(model);
@@ -182,6 +221,8 @@ namespace Space_Invaders_Project.Views
            };
         }
 
+
+        // Metoda rysująca widok pauzy gry
         public void drawPauseOverlay()
         {
             TextBlock bcgk = new TextBlock()
@@ -201,6 +242,8 @@ namespace Space_Invaders_Project.Views
             canvas.Children.Add(bcgk);
         }
 
+
+        // Metoda wznawiająca grę po zapauzowaniu
         public void erasePauseOverlay()
         {
             foreach (TextBlock item in canvas.Children.OfType<TextBlock>())

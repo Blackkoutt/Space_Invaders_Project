@@ -15,17 +15,19 @@ namespace Space_Invaders_Project.Controllers
         public MenuController(IMenuView menuView) 
         {
             _menuView = menuView;
+
+            // Dodanie obsługi eventów
             _menuView.StartGameEvent += HandleStartGameEvent;
             _menuView.ShowDescriptionEvent += HandleShowDescriptionEvent;
             _menuView.FullScreenModeEvent += HandleFullScreenModeEvent;
             _menuView.ExitGameEvent += HandleExitGameEvent;
             _menuView.ShowHighScoresEvent += HandleShowHighScoresEvent;
-
             _menuView.ChooseDifficultyEvent += HandleChooseDifficultyEvent;
             _menuView.ReturnToMenuEvent += HandleReturnToMenuEvent;
             _menuView.ReturnToDifficultyEvent += HandleStartGameEvent;
             _menuView.PlayGameEvent += HandlePlayGameEvent;
 
+            // Odczytanie tablicy wyników z pliku
             highScores = new HighScores();
             try
             {
@@ -52,9 +54,10 @@ namespace Space_Invaders_Project.Controllers
                 MessageBox.Show(CCE.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown();
             }
-
         }
 
+
+        // Metoda wywoływana w momencie kliknięcia przycisku Play w widoku podawania nicku
         private void HandlePlayGameEvent(object? sender, PlayerNicknameEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(e.PlayerNickname) || e.PlayerNickname.Length < 1)
@@ -67,15 +70,18 @@ namespace Space_Invaders_Project.Controllers
             }
             else
             {
+                // Tworzenie nowej gry
                 _menuView.ClearMenuView();
                 MapView mapView = new MapView(_menuView.GetMainWindow(),_menuView.GetCanvas());
                 highScores.Nick = e.PlayerNickname;
-                Game game = new Game(mapView, highScores);
+                Game game = new Game(mapView, _menuView, highScores);
                 game.ChooseMapBuilder(chosenDifficulty);
                 game.StartGame();
             }
         }
 
+
+        // Metoda obsługująca event wciśnięcia przycisku return powodującego powrót do menu głównego
         private void HandleReturnToMenuEvent(object? sender, EventArgs e)
         {
             _menuView.ClearMenuView();
@@ -89,10 +95,6 @@ namespace Space_Invaders_Project.Controllers
             _menuView.ClearMenuView();
             _menuView.ShowEnterNicknameView();
             chosenDifficulty = e.DifficultyLevel;
-            /*MapView mapView = new MapView(_menuView.GetMainWindow(),_menuView.GetCanvas());
-            Game game = new Game(mapView, highScores);
-            game.ChooseMapBuilder(e.DifficultyLevel);
-            game.StartGame();*/
         }
 
 
@@ -134,7 +136,5 @@ namespace Space_Invaders_Project.Controllers
             _menuView.ClearMenuView();
             _menuView.CreateDifficultyButtonsAndLabel();
         }
-
-
     }
 }

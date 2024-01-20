@@ -12,9 +12,7 @@ namespace Space_Invaders_Project.Views.Interfaces
         event EventHandler ExitGameEvent;
         event EventHandler FullScreenModeEvent;
         event EventHandler ReturnToMenuEvent;
-
         event EventHandler<DifficultyEventArgs> ChooseDifficultyEvent;
-
         event EventHandler ReturnToDifficultyEvent;
         event EventHandler<PlayerNicknameEventArgs> PlayGameEvent;
 
@@ -22,6 +20,7 @@ namespace Space_Invaders_Project.Views.Interfaces
         void CreateMenuButtons();
         void ShowDescription();
         void ShowNicknameError(string variant);
+        void LoadGameOverScreen(int score);
         Canvas GetCanvas();
         void ClearMenuView();
         MainWindow GetMainWindow();

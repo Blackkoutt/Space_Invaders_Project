@@ -7,7 +7,7 @@ namespace Space_Invaders_Project.Extensions.Strategy
         public ScoreMultiplier() { }    
         public override void admitBonus(Player player)
         {
-            player.ScoreMultiplier = 2; // przykładowa wartość mnożnika
+            player.ScoreMultiplier = 2; 
         }
     }
 }

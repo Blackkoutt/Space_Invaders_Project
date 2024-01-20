@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Shapes;
 
 namespace Space_Invaders_Project.Models.Interfaces

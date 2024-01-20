@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Space_Invaders_Project.Models;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using Space_Invaders_Project.Models.Decorator;
-using Space_Invaders_Project.Extensions.Observer;
 
 namespace Space_Invaders_Project.Views.Interfaces
 {
@@ -26,6 +22,7 @@ namespace Space_Invaders_Project.Views.Interfaces
         void SpawnMissileModel(Rectangle model, Point position);
         void AddNotification(Label label);
         void RemoveNotification();
+        void RemoveAllEntitiesAndEvents();
         void drawPauseOverlay();
         void erasePauseOverlay();
         void UpdateScoreLabel(int score);

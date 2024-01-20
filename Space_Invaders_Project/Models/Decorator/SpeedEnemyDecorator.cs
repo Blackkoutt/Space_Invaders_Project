@@ -1,6 +1,5 @@
 ﻿using Space_Invaders_Project.Models.Decorator;
 using System;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace Space_Invaders_Project.Models
