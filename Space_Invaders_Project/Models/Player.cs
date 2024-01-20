@@ -1,5 +1,4 @@
-﻿using Space_Invaders_Project.Extensions.Observer;
-using Space_Invaders_Project.Extensions.Strategy;
+﻿using Space_Invaders_Project.Extensions.Strategy;
 using System;
 using System.Windows;
 using System.Windows.Media;
@@ -27,26 +26,28 @@ namespace Space_Invaders_Project.Models
 
         private Player()
         {
-            // tu defaultowe wartości
-
-            // x i y zależne raczej od szerokości okna 
-            // powinny być ustawiane w controlerze w zależności od canvasu zaraz po pobraniu instancji
-            /*position = new Point(x,y)*/
-
-            // Przykładowe początkowe wartości
-            health = 3;
-            damage = 1;
-            attackSpeed = 2;
-            scoreMultiplier = 1;
-            attackSpeed = 1.0f;
-            attackVelocity = 1.0f;
-
+            SetDefaultStats();  
             skin = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/player.png")) };
             model = new Rectangle { Tag = "player", Fill = this.skin, Height = 65, Width = 55, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
             hitbox = new Rect(position.X, position.Y, model.Width, model.Height);
-            isDead = false;
-            score = 0;  // nie wiem czy tutaj powinnismy trzymać score
         }
+
+
+        // Metoda ustawiająca defaultowe wartości gracza
+        public void SetDefaultStats()
+        {
+            health = 3;
+            damage = 10;
+            attackSpeed = 2;
+            scoreMultiplier = 1;
+            attackSpeed = 1.0f;
+            attackVelocity = 6;
+            isDead = false;
+            score = 0;
+        }
+        
+
+        // Metoda pobierająca instancję gracza
         public static Player getInstance()
         {
             if (playerInstance == null)
@@ -55,39 +56,71 @@ namespace Space_Invaders_Project.Models
             }
             return playerInstance;
         }
-        // Nie wiem co to dokładnie miało na celu
-        /*public Player_Missile shootMissle()
-        {
-            return new Player_Missile();
-        }*/
 
+        
+        // Metoda ustawiająca pozycję gracza
         public void setPosition(int x, int y)
         {
             position = new Point(x, y);
             hitbox.X = x;
             hitbox.Y = y;
         }
+
+
+        // Metoda dodająca bonus graczowi
         public void addBonus()
         {
             bonus.admitBonus(this);
         }
+
+
+        // Metoda tworząca pocisk gracza
         public Player_Missile shootMissile()
         {
             return new Player_Missile(new Point((position.X + model.Width / 2) - 2, position.Y), attackVelocity, damage);
         }
+
+
+        // Metoda ustawijąca bonus
         public void setBonusStrategy(Player_Bonus strategy)
         {
             bonus = strategy;
         }
-        public Rect Hitbox { get { return hitbox; } }
-        public Rectangle Model { get { return model; } }
-        public Point Position { get { return position; } }
-        public ImageBrush Skin { get { return skin; } }
+
+
+        // Metoda dodająca score 
         public void addScore()
         {
             score += scoreMultiplier;
-            HighScores.Notification(score);
         }
+
+
+        // Metoda aktualizująca HP gracza
+        public void dealDamage(int enemyDamage)
+        {
+            health -= enemyDamage;
+            if (health <= 0)
+                isDead = true;
+        }
+
+
+        // Gettery i settery
+        public Rect Hitbox 
+        { 
+            get { return hitbox; }
+        }
+        public Rectangle Model 
+        { 
+            get { return model; }
+        }
+        public Point Position 
+        { 
+            get { return position; }
+        }
+        public ImageBrush Skin 
+        { 
+            get { return skin; }
+        }       
         public bool IsDeath
         {
             get { return isDead; }
@@ -123,7 +156,6 @@ namespace Space_Invaders_Project.Models
             get { return scoreMultiplier; }
             set { scoreMultiplier = value; }
         }
-        // to możliwe że nie potrzebne tutaj
         public int Score
         {
             get { return score; }

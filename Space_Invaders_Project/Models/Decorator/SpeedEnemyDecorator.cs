@@ -1,6 +1,5 @@
 ﻿using Space_Invaders_Project.Models.Decorator;
 using System;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace Space_Invaders_Project.Models
@@ -9,7 +8,7 @@ namespace Space_Invaders_Project.Models
     {
         public SpeedEnemyDecorator(IEnemy enemy) : base(enemy)
         {
-            enemy.setAttackVelocity(12);
+            enemy.setAttackVelocity(10);
             enemy.setLegSkin(new BitmapImage(new Uri("pack://application:,,,/Assets/speedEnemyLeg.png")));
         }
     }

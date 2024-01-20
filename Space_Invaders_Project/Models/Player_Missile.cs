@@ -1,6 +1,5 @@
 ﻿using Space_Invaders_Project.Models.Interfaces;
 using System.Windows;
-using System.Printing;
 using System.Windows.Shapes;
 using System.Windows.Media;
 
@@ -22,6 +21,17 @@ namespace Space_Invaders_Project.Models
             this.model = new Rectangle { Tag = "playerMissile", Height = 20, Width = 5, Fill = Brushes.White, Stroke = Brushes.Red };
             this.hitbox = new Rect(position.X, position.Y, model.Width, model.Height);
         }
+
+
+        // Metoda ustawiająca pozycję pocisku
+        public void setPosition(float y)
+        {
+            position = new Point(position.X, position.Y - y);
+            hitbox.Y = position.Y;
+        }
+
+
+        // Gettery i settery
         public int Damage
         {
             get { return damage; }
@@ -38,10 +48,9 @@ namespace Space_Invaders_Project.Models
         {
             get { return this.model; }
         }
-        public void setPosition(float y)
+        public Rect Hitbox
         {
-            position = new Point(position.X, position.Y-y);
-            hitbox.Y = y;
+            get { return hitbox; }
         }
     }
 }

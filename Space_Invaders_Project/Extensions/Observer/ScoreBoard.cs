@@ -1,35 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Space_Invaders_Project.Extensions.Observer
 {
     public class ScoreBoard : ISubscriber
     {
-        string[] tmpNicks = new string[HighScores.Nicks.Length];
-        int[] tmpScores = new int[HighScores.Scores.Length];
+        public ScoreBoard() { } 
 
-        public ScoreBoard()
-        {
-            Array.Copy(HighScores.Nicks, tmpNicks, HighScores.Nicks.Length);
-            Array.Copy(HighScores.Scores, tmpScores, HighScores.Scores.Length);
-        } 
-        public void Update(string name, int score, int position)
-        {
 
-            for (int i = 8; i >= position; i--)
+        // Metoda aktualizująca tablicę wyników w czasie rzeczywistym 
+        public void Update(string name, int score, int position, ref List<string> nicks, ref List<int> scores)
+        {
+            nicks.Insert(position, name);
+            scores.Insert(position, score);
+            if(nicks.Count > 10)
             {
-                tmpNicks[i+1] = HighScores.Nicks[i];
-                tmpScores[i+1] = HighScores.Scores[i];
+                nicks.RemoveAt(nicks.Count-1);
+                scores.RemoveAt(scores.Count - 1);
             }
-            tmpNicks[position] = name;
-            tmpScores[position] = score;
-        }
-
-        public void UpdateRealHighScores()
-        {
-            HighScores.Nicks = tmpNicks;
-            HighScores.Scores = tmpScores;
-            HighScores.SaveToFile();
         }
     }
 }

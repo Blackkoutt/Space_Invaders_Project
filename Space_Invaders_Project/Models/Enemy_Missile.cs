@@ -21,6 +21,17 @@ namespace Space_Invaders_Project.Models
             this.model = new Rectangle { Tag = "enemyMissile", Height = 20, Width = 5, Fill = Brushes.Purple };
             this.hitbox = new Rect(position.X, position.Y, model.Width, model.Height);
         }
+
+
+        // Metoda ustawiająca pozycję pocisku 
+        public void setPosition(float y)
+        {
+            position = new Point(position.X, position.Y + y);
+            hitbox.Y = position.Y;
+        }
+
+
+        // Gettery i settery
         public float Speed
         {
             get { return speed; }
@@ -37,16 +48,9 @@ namespace Space_Invaders_Project.Models
         {
             get { return  damage; }
         }
-
-        // Nie pamiętam jak to dokładnie miało działać ;/
-        public void move()
+        public Rect Hitbox 
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void setPosition(float y)
-        {
-            throw new System.NotImplementedException();
+            get { return hitbox; }
         }
     }
 }

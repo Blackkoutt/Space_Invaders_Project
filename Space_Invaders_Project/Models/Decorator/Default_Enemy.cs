@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -32,25 +31,37 @@ namespace Space_Invaders_Project.Models
             this.bodyModel = new Rectangle() { Fill = this.bodySkin, Height = 45, Width = 45 };
             this.legModel = new Rectangle() { Fill = this.legSkin, Height = 45, Width = 45 };
             this.hitbox = new Rect(position.X, position.Y, bodyModel.Width, bodyModel.Height);
+            this.isDead = false;
             setHealth(10);
             setDamage(10);
             setAttackVelocity(6);
+        }
+        public Rect Hitbox
+        {
+            get { return hitbox; }
+        }
+
+        public Point Position
+        {
+            get { return this.position; }
         }
 
         public void SetPosition(int x, int y)
         {
             position = new Point(x, y);
+            hitbox.X = x;
+            hitbox.Y = y;
         }
-        public void dealDamage(Player player)
+        public void dealDamage(int playerDamage)
         {
-            health -= 1;
-            if (health == 0)
-                onDeath(player);
+            health -= playerDamage;
+            if (health <= 0)
+                onDeath();
         }
 
-        public void onDeath(Player player)
+        public void onDeath()
         {
-            player.addScore();
+            isDead = true;
         }
 
         public void setAttackVelocity(int atv)
@@ -93,45 +104,27 @@ namespace Space_Invaders_Project.Models
                 legModel.Fill = legSkin;
         }
 
-        public Enemy_Missile shootMissle(int dmg, int speed)
+        public Enemy_Missile shootMissile()
         {
-            return new Enemy_Missile(position, dmg, speed);
+            return new Enemy_Missile(new Point(position.X + bodyModel.Width/2 , position.Y + bodyModel.Height), attackVelocity, damage);
+        }
+        public Rectangle ArmModel
+        {
+            get { return armModel; }
+        }
+        public Rectangle BodyModel
+        {
+            get { return bodyModel; }
+        }
+        public Rectangle LegModel
+        {
+            get { return legModel; }
+        }
+        public bool IsDead
+        {
+            get { return isDead; }
         }
 
-        public void drawEnemy(Canvas canvas)
-        {
-            if (position.X < 0)
-            {
-                this.armModel.Visibility = Visibility.Hidden;
-                this.bodyModel.Visibility = Visibility.Hidden;
-                this.legModel.Visibility = Visibility.Hidden;
-            }
-            else
-            {
-                this.armModel.Visibility = Visibility.Visible;
-                this.bodyModel.Visibility = Visibility.Visible;
-                this.legModel.Visibility = Visibility.Visible;
-            }
-            Canvas.SetTop(this.armModel, position.X);
-            Canvas.SetLeft(this.armModel, position.Y);
-            Canvas.SetTop(this.bodyModel, position.X);
-            Canvas.SetLeft(this.bodyModel, position.Y);
-            Canvas.SetTop(this.legModel, position.X);
-            Canvas.SetLeft(this.legModel, position.Y);
-        }
-
-        public void addEnemyToCanvas(Canvas canvas)
-        {
-            foreach (Rectangle r in getModel())
-            {
-                canvas.Children.Add(r);
-            }
-        }
-
-        public Rectangle[] getModel()
-        {
-            return new Rectangle[] { armModel, bodyModel, legModel };
-        }
 
         public static IEnemy enemyGenerator(Point position, int numberOfDecorators)
         {

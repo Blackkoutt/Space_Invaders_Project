@@ -2,45 +2,46 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Space_Invaders_Project.Extensions.Observer
 {
-    public static class HighScores
+    public class HighScores
     {
-        private static string[] nicks = new string[10];
-        private static int[] scores = new int[10];
-        private static List<ISubscriber> subscribers = new List<ISubscriber>();
-        private static string nick = "test2";
-        
-        public static string[] Nicks { get { return nicks; } set { nicks = value; } }
-        public static int[] Scores { get { return scores; } set { scores = value; } }
+        private List<string> nicksList = new List<string>();
+        private List<int> scoresList = new List<int>(); 
+        private List<ISubscriber> subscribers = new List<ISubscriber>();
+        private string nick = "test2";
 
-        public static void SaveToFile()
+        public HighScores() { } 
+
+
+        // Metoda zapisująca tablice wyników do pliku
+        public void SaveToFile()
         {
             string fileName = "highscores.txt";
             StreamWriter sw = new StreamWriter(fileName);
             sw.WriteLine("//\"nick score\"");
-            for (int i =  0; i < 10; i++) 
+            for (int i =  0; i < nicksList.Count; i++) 
             {
-                sw.WriteLine(nicks[i] + " " + scores[i]);
+                sw.WriteLine(nicksList[i] + " " + scoresList[i]);
             }
             sw.Close();
         }
 
-        //throw Exceptions
-        public static void ReadFromFile()
+
+        // Metoda odczytująca tablicę wyników z pliku - wyrzuca wyjątki w przypadku błędów związanych z odczytem
+        public void ReadFromFile()
         {
             StreamReader sr;
             string fileName = "highscores.txt";
-            int lineNumber = 0;
+
             try
             {
                 sr = new StreamReader(fileName);
             }
             catch (FileNotFoundException)
             {
-                throw new CannotFindFileException($"Cannot find file named {fileName}");
+                throw new CannotFindFileException($"Cannot find file named: {fileName}");
             }
             catch(Exception ex)
             {
@@ -60,7 +61,7 @@ namespace Space_Invaders_Project.Extensions.Observer
                     int lastSpaceIndex = line.LastIndexOf(' ');
                     if(lastSpaceIndex == -1)
                     {
-                        throw new FileSyntaxException($"Bad syntax in {fileName}");
+                        throw new FileSyntaxException($"Bad syntax in: {fileName}");
                     }
                     nick = line.Substring(0, lastSpaceIndex).TrimEnd();
                     score = line.Substring(lastSpaceIndex + 1);
@@ -70,43 +71,65 @@ namespace Space_Invaders_Project.Extensions.Observer
                     }
                     catch
                     {
-                        throw new CannotConvertException($"Failed to parse score value in {fileName}");
+                        throw new CannotConvertException($"Failed to parse score value in: {fileName}");
                     }
-                    nicks[lineNumber] = nick;
-                    scores[lineNumber++] = scoreInt;
+
+                    nicksList.Add(nick);
+                    scoresList.Add(scoreInt);
                 }
             }
             sr.Close();
         }
-        public static void Notification(int score)
+
+
+        // Metoda informująca subskrybentów o zmianie stanu
+        public void Notification(int score)
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < scoresList.Count; i++)
             {
-                if (score > scores[i])
+                if (score > scoresList[i])
                 {
                     foreach (ISubscriber subscriber in subscribers)
                     {
-                        subscriber.Update(nick, score, i);
+                        subscriber.Update(nick, score, i, ref nicksList, ref scoresList);
                     }
                     break;
                 }
             }
         }
-        public static void AddSubscriber(ISubscriber s)
+
+
+        // Metoda dodająca subskrybenta
+        public void AddSubscriber(ISubscriber s)
         {
             subscribers.Add(s);
         }
-        public static void RemoveSubscriber(ISubscriber s)
+
+
+        // Metoda usuwająca subskrybenta
+        public void RemoveSubscriber(ISubscriber s)
         {
             subscribers.Remove(s);
         }
-        public static void RemoveAllSubscribers()
+
+
+        // Metoda usuwająca wszytskich subskrybentów
+        public void RemoveAllSubscribers()
         {
-            foreach (ScoreBoard subscriber in subscribers.OfType<ScoreBoard>())
-                subscriber.UpdateRealHighScores();
             subscribers.Clear();
         }
-        public static string Nick 
+
+
+        // Gettery i settery
+        public List<string> NickList
+        {
+            get { return nicksList; }
+        }
+        public List<int> ScoresList
+        {
+            get { return scoresList; }
+        }
+        public string Nick 
         {
             get { return nick; } 
             set { nick = value; } 

@@ -7,7 +7,7 @@ namespace Space_Invaders_Project.Extensions.Strategy
         public MovementSpeedBonus() { }
         public override void admitBonus(Player player)
         {
-            player.MovementSpeed = 1.3f;// przykładowa wartość
+            player.MovementSpeed = 1.3f;
         }
     }
 }

@@ -8,6 +8,6 @@ namespace Space_Invaders_Project.Extensions.Builder
     public interface MapBuilder
     {
         List<IEnemy> CreateEnemies(int level);
-        List<Barrier> GetBarrier();
+        List<DefenceBarrier> GetBarrier();
     }
 }

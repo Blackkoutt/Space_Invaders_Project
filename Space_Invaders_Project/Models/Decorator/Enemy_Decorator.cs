@@ -1,5 +1,5 @@
 ﻿using Space_Invaders_Project.Models.Decorator;
-using System.Windows.Controls;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -13,24 +13,50 @@ namespace Space_Invaders_Project.Models
         {
             decoratedEnemy = enemy;
         }
+        public Point Position
+        {
+            get { return decoratedEnemy.Position; }
+        }
+        public bool IsDead
+        {
+            get { return decoratedEnemy.IsDead; }
+        }
+
+        public Rectangle ArmModel
+        {
+            get { return decoratedEnemy.ArmModel; }
+        }
+        public Rectangle BodyModel
+        {
+            get { return decoratedEnemy.BodyModel; }
+        }
+        public Rectangle LegModel
+        {
+            get { return decoratedEnemy.LegModel; }
+        }
+        public Rect Hitbox
+        {
+            get { return decoratedEnemy.Hitbox; }
+        }
+
         public virtual void SetPosition(int x, int y)
         {
             decoratedEnemy.SetPosition(x, y);
         }
 
-        public virtual Enemy_Missile shootMissle(int dmg, int speed)
+        public virtual Enemy_Missile shootMissile()
         {
-            return decoratedEnemy.shootMissle(dmg, speed);
+            return decoratedEnemy.shootMissile();
         }
 
-        public virtual void dealDamage(Player player)
+        public virtual void dealDamage(int playerDamage)
         {
-            decoratedEnemy.dealDamage(player);
+            decoratedEnemy.dealDamage(playerDamage);
         }
 
-        public virtual void onDeath(Player player)
+        public virtual void onDeath()
         {
-            decoratedEnemy.onDeath(player);
+            decoratedEnemy.onDeath();
         }
 
         public virtual void setAttackVelocity(int atv)
@@ -61,14 +87,14 @@ namespace Space_Invaders_Project.Models
             decoratedEnemy.setLegSkin(source);
         }
 
-        public virtual void drawEnemy(Canvas canvas)
+        /*public virtual void drawEnemy(Canvas canvas)
         {
             decoratedEnemy.drawEnemy(canvas);
-        }
+        }*/
 
-        public virtual Rectangle[] getModel()
+        /*public virtual Rectangle[] getModel()
         {
             return decoratedEnemy.getModel();
-        }
+        }*/
     }
 }
