@@ -1,5 +1,4 @@
 ﻿using Space_Invaders_Project.Controllers.Interfaces;
-using Space_Invaders_Project.Extensions.Observer;
 using Space_Invaders_Project.Models;
 using Space_Invaders_Project.Models.Decorator;
 using Space_Invaders_Project.Models.Interfaces;
@@ -8,9 +7,6 @@ using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Resources;
-using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -23,18 +19,14 @@ namespace Space_Invaders_Project.Controllers
         private IMapView _mapView;
         private IGame gameFacade;
         private Player player;
-        //private List<Player_Missile> playerMissles = new List<Player_Missile>();
         private List<IEnemy> enemies;
         private List<DefenceBarrier> barriers;
         private List<IMissile> missiles;
-       // private List<Enemy_Missile> enemyMissles;
         
         private string playerMoveDirection = "";
         private string enemyMoveDirection = "right";
         private int notificationTimer = 0;
         private bool gamePaused = false;
-        //private int bulletTimer = 90;
-       // private int defaultBulletTimer = 90;
         private DispatcherTimer bulletTimer;
 
         public Game_Controller(Player player, IMapView mapView, List<IEnemy> enemies, List<DefenceBarrier> barriers, IGame game)
@@ -242,6 +234,9 @@ namespace Space_Invaders_Project.Controllers
                     if(missile is Player_Missile && enemy.Hitbox.IntersectsWith(missile.Hitbox))
                     {
                         enemy.dealDamage(player);
+                        player.addScore();
+                        gameFacade.HighScores.Notification(player.Score);
+
                         missiles.Remove(missile);
                         _mapView.RemoveEntity(missile.Model);
                         break;

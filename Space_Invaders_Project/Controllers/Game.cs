@@ -4,12 +4,9 @@ using Space_Invaders_Project.Extensions.Observer;
 using Space_Invaders_Project.Models;
 using Space_Invaders_Project.Models.Decorator;
 using Space_Invaders_Project.Models.Interfaces;
-using Space_Invaders_Project.Views;
 using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
-using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -25,11 +22,19 @@ namespace Space_Invaders_Project.Controllers
         private Player player;
         private Game_Controller gc;
         private int level = 1;
+        private HighScores highScores;
 
-        public Game(IMapView mapView) 
+        public Game(IMapView mapView, HighScores highScores) 
         {
             _mapView = mapView;
+            this.highScores = highScores;
+
             gameTimer = new DispatcherTimer();
+        }
+
+        public HighScores HighScores 
+        { 
+            get { return highScores; } 
         }
 
 
@@ -47,9 +52,9 @@ namespace Space_Invaders_Project.Controllers
 
            
             Notification notification = new Notification(_mapView);
-            HighScores.AddSubscriber(notification);
+            highScores.AddSubscriber(notification);
             ScoreBoard scoreBoard = new ScoreBoard();
-            HighScores.AddSubscriber(scoreBoard);
+            highScores.AddSubscriber(scoreBoard);
 
             // Przygotowanie mapy
             gc = new Game_Controller(player, _mapView, enemies, barriers, this);
@@ -62,7 +67,8 @@ namespace Space_Invaders_Project.Controllers
         }
         public void GameOver()
         {
-            HighScores.RemoveAllSubscribers();
+            highScores.RemoveAllSubscribers();
+            highScores.SaveToFile();
         }
 
 

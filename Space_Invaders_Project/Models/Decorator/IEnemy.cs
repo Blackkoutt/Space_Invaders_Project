@@ -21,7 +21,7 @@ namespace Space_Invaders_Project.Models.Decorator
         public void setHealth(int hp);
         public void setDamage(int dmg);
         public void setAttackVelocity(int atv);
-        public void onDeath(Player player);
+        public void onDeath();
         public Rect Hitbox { get; }
         public bool IsDead { get; }
         //public void drawEnemy(Canvas canvas);

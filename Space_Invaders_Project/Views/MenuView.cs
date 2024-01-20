@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Space_Invaders_Project.Views
 {
@@ -22,6 +23,15 @@ namespace Space_Invaders_Project.Views
             DifficultyLevel = difficultyLevel;
         }
     }
+    public class PlayerNicknameEventArgs : EventArgs
+    {
+        public string PlayerNickname { get; }
+
+        public PlayerNicknameEventArgs(string playerNickname)
+        {
+            PlayerNickname = playerNickname;
+        }
+    }
 
     public class MenuView : IMenuView
     {
@@ -32,13 +42,14 @@ namespace Space_Invaders_Project.Views
         private Button highScoresButton;
         private Button exitGameButton;
         private Button fullScreenButton;
-        private Button returnFromDescriptionButton;
 
         private Button easyLevelButton;
         private Button mediumLevelButton;
         private Button hardLevelButton;
+        private Button playButton;
 
         private Button returnToMenuButton;
+        private Button returnToDifficulty;
 
         public event EventHandler StartGameEvent;
         public event EventHandler ShowDescriptionEvent;
@@ -46,6 +57,9 @@ namespace Space_Invaders_Project.Views
         public event EventHandler ExitGameEvent;
         public event EventHandler FullScreenModeEvent;
         public event EventHandler ReturnToMenuEvent;
+
+        public event EventHandler ReturnToDifficultyEvent;
+        public event EventHandler<PlayerNicknameEventArgs> PlayGameEvent;
 
         public event EventHandler<DifficultyEventArgs> ChooseDifficultyEvent;
 
@@ -101,7 +115,7 @@ namespace Space_Invaders_Project.Views
                 Width = 220,
                 Content = content,
                 FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/#Press Start 2P"),
-                Foreground = Brushes.Green,
+                Foreground = Brushes.LimeGreen,
                 Background = Brushes.Transparent,
                 FontSize = 20,
                 BorderThickness = new Thickness(0),
@@ -112,32 +126,87 @@ namespace Space_Invaders_Project.Views
             return button;
         }
 
+        private void CreateDefaultLabel(string tag, int height, int width, int fontSize, string content, int top, Brush brush)
+        {
+            Label label = new Label()
+            {
+                Tag = tag,
+                Height = height,
+                Width = width,
+                FontSize = fontSize,
+                Foreground = brush,
+                FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/#Press Start 2P"),
+                Content = content
 
-        
+            };
+            Canvas.SetLeft(label, this.width / 2 - label.Width / 2);
+            Canvas.SetTop(label, this.height / 2 - top);
+            canvas.Children.Add(label);
+        }
+        public void ShowNicknameError(string variant)
+        {
+            Label labelToRemove = canvas.Children
+            .OfType<Label>()
+            .FirstOrDefault(item => (item.Tag == "error"));
+
+            if (labelToRemove != null)
+            {
+                canvas.Children.Remove(labelToRemove);
+            }
+            switch (variant)
+            {
+                case "min_width":
+                    {
+                        CreateDefaultLabel("error", 45, 500, 10, "Nickname must have min 1 character", 50, Brushes.Red);
+                        break;
+                    }
+                case "exist":
+                    {
+                        CreateDefaultLabel("error", 45, 500, 10, "Such nickname already exists in Highscore table", 50, Brushes.Red);
+                        break;
+                    }
+            }
+            
+        }
+        public void ShowEnterNicknameView()
+        {
+            CreateDefaultLabel("nickname", 45, 500, 25, "Enter your nickname: ", 150, Brushes.YellowGreen);
+            TextBox textBox = new TextBox() 
+            {
+                Width = 400,
+                Height = 40,
+                FontSize = 25,
+                FontFamily = new FontFamily(new Uri("pack://application:,,,/"),
+                "./Fonts/#Press Start 2P"),
+                VerticalContentAlignment = VerticalAlignment.Center
+            };
+            Canvas.SetTop(textBox, height / 3);
+            Canvas.SetLeft(textBox, width / 2 - textBox.Width/2);
+            canvas.Children.Add(textBox);
+
+            playButton = CreateButton(width / 2, height / 2 - 10, "Play!");
+            returnToDifficulty = CreateButton(width / 2, height / 2 + 180, "Return");
+
+            returnToDifficulty.Click += delegate { ReturnToDifficultyEvent?.Invoke(this, EventArgs.Empty); };
+            playButton.Click += delegate { PlayGameEvent?.Invoke(this, new PlayerNicknameEventArgs(textBox.Text)); };
+        }
 
         // Metoda tworząca przyciski wyboru poziomu trudności i przypisująca eventy
-        public void CreateDifficultyButtons()
+        public void CreateDifficultyButtonsAndLabel()
         {
-            easyLevelButton = CreateButton(width / 2, height / 2 - 130, "Easy");
-            mediumLevelButton = CreateButton(width / 2, height / 2 - 65, "Medium");
-            hardLevelButton = CreateButton(width / 2, height / 2, "Hard");
+            CreateDefaultLabel("difficulty", 45, 410, 25, "Choose Difficulty", 160, Brushes.YellowGreen);
+
+            easyLevelButton = CreateButton(width / 2, height / 2 - 110, "Easy");
+            mediumLevelButton = CreateButton(width / 2, height / 2 - 45, "Medium");
+            hardLevelButton = CreateButton(width / 2, height / 2 + 20, "Hard");
+
+            returnToMenuButton = CreateButton(width / 2, height / 2 + 160, "Return");
 
             easyLevelButton.Click += delegate { ChooseDifficultyEvent?.Invoke(this, new DifficultyEventArgs(0)); };
             mediumLevelButton.Click += delegate { ChooseDifficultyEvent?.Invoke(this, new DifficultyEventArgs(1)); };
             hardLevelButton.Click += delegate { ChooseDifficultyEvent?.Invoke(this, new DifficultyEventArgs(2)); };
-
+            returnToMenuButton.Click += delegate { ReturnToMenuEvent?.Invoke(this, EventArgs.Empty); };
         }
-
-
-        // Metoda usuwająca przyciski wyboru poziomu trudności
-        public void ClearDifficultyButtons()
-        {
-            canvas.Children.Clear();
-            easyLevelButton.Click -= delegate { ChooseDifficultyEvent?.Invoke(this, new DifficultyEventArgs(0)); };
-            mediumLevelButton.Click -= delegate { ChooseDifficultyEvent?.Invoke(this, new DifficultyEventArgs(1)); };
-            hardLevelButton.Click -= delegate { ChooseDifficultyEvent?.Invoke(this, new DifficultyEventArgs(2)); };
-        }
-
 
         // Metoda tworząca przyciski wyboru w menu i przypisująca eventy
         public void CreateMenuButtons()
@@ -164,36 +233,18 @@ namespace Space_Invaders_Project.Views
             fullScreenButton.Click += delegate { FullScreenModeEvent?.Invoke(this, EventArgs.Empty); };
         }
 
-
-        // Metoda usuwająca z widoku przyciski głównego menu
-        public void ClearMenuButtons()
-        {
-            canvas.Children.Clear();
-            startGameButton.Click -= delegate { StartGameEvent?.Invoke(this, EventArgs.Empty); };
-            descriptionButton.Click -= delegate { StartGameEvent?.Invoke(this, EventArgs.Empty); };
-            highScoresButton.Click -= delegate { ShowHighScoresEvent?.Invoke(this, EventArgs.Empty); };
-            exitGameButton.Click -= delegate { ExitGameEvent?.Invoke(this, EventArgs.Empty); };
-            fullScreenButton.Click -= delegate { FullScreenModeEvent?.Invoke(this, EventArgs.Empty); };
-        }
-
-
         // Metoda wyświetlająca widok opisu gry
         public void ShowDescription()
         {
             _mainWindow.Background.Opacity = 0.3;
             CreateDescriptionLabel(8, 30);
-            returnFromDescriptionButton = CreateButton(width - 80, height - 150, "Return");
-            returnFromDescriptionButton.Click += delegate { ReturnFromDescriptionEvent?.Invoke(this, EventArgs.Empty); };
+            returnToMenuButton = CreateButton(width - 150, height - 150, "Return");
+            returnToMenuButton.Click += delegate { ReturnToMenuEvent?.Invoke(this, EventArgs.Empty); };
         }
-
-
-        // Metoda usuwająca z widoku opis gry
-        public void ClearDescription()
+        public void ClearMenuView()
         {
             canvas.Children.Clear();
-            returnFromDescriptionButton.Click -= delegate { ReturnFromDescriptionEvent?.Invoke(this, EventArgs.Empty); };
         }
-
 
         // Metoda tworząca opis gry (label)
         private void CreateDescriptionLabel(int left, int top)
@@ -219,7 +270,6 @@ namespace Space_Invaders_Project.Views
             canvas.Children.Add(descriptionLabel);
         }
 
-
         // Metoda zmieniająca rozmiar okna
         public void ChangeWindowSize()
         {
@@ -234,8 +284,11 @@ namespace Space_Invaders_Project.Views
                 _mainWindow.WindowStyle = WindowStyle.None;
             }
         }
-        public void ShowHighScores()
+        public void ShowHighScores(HighScores highScores)
         {
+            List<string> nickList = highScores.NickList;
+            List<int> scoreList = highScores.ScoresList;
+
             _mainWindow.Background.Opacity = 0.3;
             Label titleLabel = new Label() { Content = "Top 10 highscores:", Foreground = Brushes.YellowGreen};
             Canvas.SetTop(titleLabel, 10);
@@ -244,7 +297,7 @@ namespace Space_Invaders_Project.Views
 
             for (int i = 0; i < 10; i++)
             {
-                string formatterText = String.Format("#{0} - Nick: {1} - Score: {2}", i + 1, HighScores.Nicks[i], HighScores.Scores[i]);
+                string formatterText = String.Format("#{0} - Nick: {1} - Score: {2}", i + 1, nickList[i], scoreList[i]);
                 Label newScore = new Label() { Content = formatterText, Foreground = Brushes.White, FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/#Press Start 2P"), };
                 Canvas.SetTop(newScore, 40 * (i + 1) + 20);
                 Canvas.SetLeft(newScore, canvas.Width / 2 - 160);

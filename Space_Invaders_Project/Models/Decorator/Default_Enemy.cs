@@ -57,13 +57,13 @@ namespace Space_Invaders_Project.Models
         {
             health -= player.Damage;
             if (health == 0)
-                onDeath(player);
+                onDeath();
         }
 
-        public void onDeath(Player player)
+        public void onDeath()
         {
             isDead = true;
-            player.addScore();
+            //player.addScore();
         }
 
         public void setAttackVelocity(int atv)

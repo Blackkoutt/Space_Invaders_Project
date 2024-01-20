@@ -76,7 +76,7 @@ namespace Space_Invaders_Project.Models
         public void addScore()
         {
             score += scoreMultiplier;
-            HighScores.Notification(score);
+            //HighScores.Notification(score);
         }
         public bool IsDeath
         {

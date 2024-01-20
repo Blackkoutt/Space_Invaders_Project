@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Space_Invaders_Project.Extensions.Observer;
+using System;
 using System.Windows.Controls;
 
 namespace Space_Invaders_Project.Views.Interfaces
@@ -12,19 +13,20 @@ namespace Space_Invaders_Project.Views.Interfaces
         event EventHandler FullScreenModeEvent;
         event EventHandler ReturnToMenuEvent;
 
-        event EventHandler ReturnFromDescriptionEvent;
-
         event EventHandler<DifficultyEventArgs> ChooseDifficultyEvent;
 
+        event EventHandler ReturnToDifficultyEvent;
+        event EventHandler<PlayerNicknameEventArgs> PlayGameEvent;
+
         void ChangeWindowSize();
-        void ClearDifficultyButtons();
-        void ClearMenuButtons();
         void CreateMenuButtons();
         void ShowDescription();
-        void ClearDescription();
+        void ShowNicknameError(string variant);
         Canvas GetCanvas();
+        void ClearMenuView();
         MainWindow GetMainWindow();
-        void CreateDifficultyButtons();
-        void ShowHighScores();
+        void ShowEnterNicknameView();
+        void CreateDifficultyButtonsAndLabel();
+        void ShowHighScores(HighScores highScores);
     }
 }

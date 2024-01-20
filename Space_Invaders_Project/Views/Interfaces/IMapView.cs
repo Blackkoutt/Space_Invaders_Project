@@ -8,6 +8,7 @@ using Space_Invaders_Project.Models;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using Space_Invaders_Project.Models.Decorator;
+using Space_Invaders_Project.Extensions.Observer;
 
 namespace Space_Invaders_Project.Views.Interfaces
 {

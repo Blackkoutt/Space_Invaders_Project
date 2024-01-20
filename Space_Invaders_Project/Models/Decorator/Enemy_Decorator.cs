@@ -55,9 +55,9 @@ namespace Space_Invaders_Project.Models
             decoratedEnemy.dealDamage(player);
         }
 
-        public virtual void onDeath(Player player)
+        public virtual void onDeath()
         {
-            decoratedEnemy.onDeath(player);
+            decoratedEnemy.onDeath();
         }
 
         public virtual void setAttackVelocity(int atv)

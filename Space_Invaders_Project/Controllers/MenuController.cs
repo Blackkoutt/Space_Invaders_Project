@@ -1,17 +1,17 @@
-﻿using Space_Invaders_Project.Extensions.Observer;
-using Space_Invaders_Project.Models;
-using Space_Invaders_Project.Models.Decorator;
+﻿using Space_Invaders_Project.Extensions.Exceptions;
+using Space_Invaders_Project.Extensions.Observer;
 using Space_Invaders_Project.Views;
 using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Windows;
-using Space_Invaders_Project.Extensions.Observer;
 
 namespace Space_Invaders_Project.Controllers
 {
     public class MenuController
     {
         private IMenuView _menuView;
+        private HighScores highScores;
+        private byte chosenDifficulty;
         public MenuController(IMenuView menuView) 
         {
             _menuView = menuView;
@@ -20,36 +20,86 @@ namespace Space_Invaders_Project.Controllers
             _menuView.FullScreenModeEvent += HandleFullScreenModeEvent;
             _menuView.ExitGameEvent += HandleExitGameEvent;
             _menuView.ShowHighScoresEvent += HandleShowHighScoresEvent;
-            _menuView.ReturnFromDescriptionEvent += HandleReturnFromDescriptionEvent;
 
             _menuView.ChooseDifficultyEvent += HandleChooseDifficultyEvent;
             _menuView.ReturnToMenuEvent += HandleReturnToMenuEvent;
+            _menuView.ReturnToDifficultyEvent += HandleStartGameEvent;
+            _menuView.PlayGameEvent += HandlePlayGameEvent;
+
+            highScores = new HighScores();
+            try
+            {
+                highScores.ReadFromFile();
+                
+            }
+            catch (CannotFindFileException CFFE)
+            {
+                MessageBox.Show(CFFE.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
+            catch (UnknownException UE)
+            {
+                MessageBox.Show(UE.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
+            catch (FileSyntaxException FSE)
+            {
+                MessageBox.Show(FSE.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
+            catch (CannotConvertException CCE)
+            {
+                MessageBox.Show(CCE.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
+
+        }
+
+        private void HandlePlayGameEvent(object? sender, PlayerNicknameEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(e.PlayerNickname) || e.PlayerNickname.Length < 1)
+            {
+                _menuView.ShowNicknameError("min_width");
+            }
+            else if (highScores.NickList.Contains(e.PlayerNickname))
+            {
+                _menuView.ShowNicknameError("exist");
+            }
+            else
+            {
+                _menuView.ClearMenuView();
+                MapView mapView = new MapView(_menuView.GetMainWindow(),_menuView.GetCanvas());
+                highScores.Nick = e.PlayerNickname;
+                Game game = new Game(mapView, highScores);
+                game.ChooseMapBuilder(chosenDifficulty);
+                game.StartGame();
+            }
+        }
+
+        private void HandleReturnToMenuEvent(object? sender, EventArgs e)
+        {
+            _menuView.ClearMenuView();
+            _menuView.CreateMenuButtons();
         }
 
 
         // Metoda obsługująca event kliknięcia przycisków wyboru trudności
         private void HandleChooseDifficultyEvent(object? sender, DifficultyEventArgs e)
         {
-            _menuView.ClearDifficultyButtons();
-            MapView mapView = new MapView(_menuView.GetMainWindow(),_menuView.GetCanvas());
-            Game game = new Game(mapView);
+            _menuView.ClearMenuView();
+            _menuView.ShowEnterNicknameView();
+            chosenDifficulty = e.DifficultyLevel;
+            /*MapView mapView = new MapView(_menuView.GetMainWindow(),_menuView.GetCanvas());
+            Game game = new Game(mapView, highScores);
             game.ChooseMapBuilder(e.DifficultyLevel);
-            game.StartGame();
-        }
-
-
-        // Metoda obsługująca event kliknięcia przycisku wróć w widoku opisu gry
-        private void HandleReturnFromDescriptionEvent(object? sender, EventArgs e)
-        {
-            _menuView.ClearDescription();
-            _menuView.CreateMenuButtons();
+            game.StartGame();*/
         }
 
 
         // Metoda obsługująca event kliknięcia przycisku "Description" w głównym menu
         private void HandleShowDescriptionEvent(object? sender, EventArgs e)
         {
-            _menuView.ClearMenuButtons();
+            _menuView.ClearMenuView();
             _menuView.ShowDescription();
         }
 
@@ -57,8 +107,8 @@ namespace Space_Invaders_Project.Controllers
         // Metoda obsługująca event kliknięcia przycisku "Show Highscores" w głównym menu
         private void HandleShowHighScoresEvent(object? sender, EventArgs e)
         {
-            _menuView.ClearMenuButtons();
-            _menuView.ShowHighScores();
+            _menuView.ClearMenuView();
+            _menuView.ShowHighScores(highScores);
         }
 
 
@@ -72,7 +122,7 @@ namespace Space_Invaders_Project.Controllers
         // Metoda obsługująca event kliknięcia przycisku "Fullscreen" w głównym menu
         private void HandleFullScreenModeEvent(object? sender, EventArgs e)
         {
-            _menuView.ClearMenuButtons();
+            _menuView.ClearMenuView();
             _menuView.ChangeWindowSize();
             _menuView.CreateMenuButtons();
         }
@@ -81,14 +131,10 @@ namespace Space_Invaders_Project.Controllers
         // Metoda obsługująca event kliknięcia przycisku "Start" w głównym menu
         private void HandleStartGameEvent(object? sender, EventArgs e)
         {
-            _menuView.ClearMenuButtons();
-            _menuView.CreateDifficultyButtons();
+            _menuView.ClearMenuView();
+            _menuView.CreateDifficultyButtonsAndLabel();
         }
-        private void HandleReturnToMenuEvent(object? sender, EventArgs e)
-        {
-            _menuView.ClearMenuButtons();
-            _menuView.CreateMenuButtons();
-        }
+
 
     }
 }
