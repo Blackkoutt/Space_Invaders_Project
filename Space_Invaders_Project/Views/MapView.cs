@@ -58,6 +58,30 @@ namespace Space_Invaders_Project.Views
                 }
             }
         }
+        // Metoda aktualizująca level gracza
+         public void UpdateLevelLabel(int level)
+        {
+            foreach (Label label in canvas.Children.OfType<Label>()) 
+            {
+                if (label.Tag.ToString() == "Level")
+                {
+                    label.Content = "Level: " + level.ToString();
+                    return;
+                }
+            }
+        }
+        // Metoda aktualizująca zycie gracza
+         public void UpdateHealthLabel(int health)
+        {
+            foreach (Label label in canvas.Children.OfType<Label>()) 
+            {
+                if (label.Tag.ToString() == "Health")
+                {
+                    label.Content = "Health: " + health.ToString();
+                    return;
+                }
+            }
+        }
 
 
         // Getter do Canvasu
@@ -98,10 +122,68 @@ namespace Space_Invaders_Project.Views
             Canvas.SetTop(scoreLabel, 0);
             canvas.Children.Add(scoreLabel);
 
+            Label healthLabel = CreateLabel($"Health: {3}", "Health");
+            Canvas.SetRight(healthLabel, 0);
+            Canvas.SetTop(healthLabel, 0);
+            canvas.Children.Add(healthLabel);
+
+            Label levelLabel = CreateLabel($"Level: {1}", "HLevel");
+            Canvas.SetTop(levelLabel, 0);
+            canvas.Children.Add(levelLabel);
+
             // Narysuj gracza
             DrawEntity(player.Model, player.Position);
             canvas.Children.Add(player.Model);
 
+            // Narysuj przeciwników
+            foreach (IEnemy enemy in enemies)
+            {
+                DrawEnemy(enemy);
+                canvas.Children.Add(enemy.ArmModel);
+                canvas.Children.Add(enemy.BodyModel);
+                canvas.Children.Add(enemy.LegModel);
+            }
+
+            // Podepnij zdarzenia do mainWindow (przycisk wciśnięty i przycisk puszczony) - obsługa w Game_Controller
+            mainWindow.KeyDown += (sender, e) =>
+            {
+                KeyDownEvent?.Invoke(this, new KeyEventArgsWrapper(e.Key));
+            };
+
+            mainWindow.KeyUp += (sender, e) =>
+            {
+                KeyUpEvent?.Invoke(this, new KeyEventArgsWrapper(e.Key));
+            };
+        }
+         public void PrepareMap(Player player, List<IEnemy> enemies, List<DefenceBarrier> barriers)
+        {
+            canvas.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/background_game.jpg")) };
+            
+            // Narysuj label z wynikiem
+            Label scoreLabel = CreateLabel($"Score: {0}", "Score");
+            Canvas.SetLeft(scoreLabel, 0);
+            Canvas.SetTop(scoreLabel, 0);
+            canvas.Children.Add(scoreLabel);
+
+            Label healthLabel = CreateLabel($"Health: {3}", "Health");
+            Canvas.SetRight(healthLabel, 0);
+            Canvas.SetTop(healthLabel, 0);
+            canvas.Children.Add(healthLabel);
+
+            Label levelLabel = CreateLabel($"Level: {1}", "HLevel");
+            Canvas.SetTop(levelLabel, 0);
+            canvas.Children.Add(levelLabel);
+
+            // Narysuj gracza
+            DrawEntity(player.Model, player.Position);
+            canvas.Children.Add(player.Model);
+
+            //Narysuj bariery
+            foreach(DefenceBarrier barrier in barriers)
+            {
+            DrawEntity(barrier.Model, barrier.Position);
+            canvas.Children.Add(barrier.Model);
+            }
             // Narysuj przeciwników
             foreach (IEnemy enemy in enemies)
             {
@@ -131,6 +213,13 @@ namespace Space_Invaders_Project.Views
             DrawEntity(enemy.ArmModel, enemy.Position);
             DrawEntity(enemy.BodyModel, enemy.Position);
             DrawEntity(enemy.LegModel, enemy.Position);
+        }
+
+        public void DrawBarrier(DefenceBarrier barrier)
+        {
+            DrawEntity(barrier.Model, barrier.Position);
+            canvas.Children.Add(barrier.Model);
+
         }
 
 
@@ -191,6 +280,13 @@ namespace Space_Invaders_Project.Views
             DrawEntity(model, position);
             canvas.Children.Add(model);
         }
+
+        public void SpawnBonusModel(Rectangle model, Point position)
+        {
+            DrawEntity(model, position);
+            canvas.Children.Add(model);
+        }
+
 
 
         // Główna metoda rysująca - wywoływana głównie podczas przesuwania obiektów (w każdym takcie zegara gameTimer w Game_Controller)

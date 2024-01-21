@@ -7,6 +7,7 @@ using Space_Invaders_Project.Models.Interfaces;
 using Space_Invaders_Project.Views.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -56,16 +57,35 @@ namespace Space_Invaders_Project.Controllers
             Size windowSize = _mapView.GetWindowSize();
             player.setPosition((int)(windowSize.Width/2 - (player.Model.Width/2)), (int)windowSize.Height - 105);
 
+            //Ustawienie pozycji barier
+            if(barriers.Count!=0)
+            {
+                if(barriers.Count==1)
+                {
+                    barriers[0].setPosition((int)(windowSize.Width/2-(barriers[0].Model.Width/2)), (int)windowSize.Height -250 );
+                }else{
+                    barriers[0].setPosition((int)0, (int)windowSize.Height -250 );
+                    barriers[1].setPosition((int)(windowSize.Width/2-barriers[2].Model.Width/2), (int)windowSize.Height -250 );
+                    barriers[2].setPosition((int)(windowSize.Width-barriers[2].Model.Width), (int)windowSize.Height -250 );
+                }
+
+            }
+
             // Dodanie konkretnych subskrybentów do Highscore
             Notification notification = new Notification(_mapView);
             highScores.AddSubscriber(notification);
             ScoreBoard scoreBoard = new ScoreBoard();
             highScores.AddSubscriber(scoreBoard);
 
+            //Dodanie listy bonusów ze strategii
+            
+
             // Przygotowanie mapy
             gc = new Game_Controller(player, _mapView, enemies, barriers, this);
-            _mapView.PrepareMap(player, enemies);
-
+            if(barriers.Count!=0){
+                _mapView.PrepareMap(player, enemies, barriers);
+            }else
+                _mapView.PrepareMap(player, enemies);
             // Uruchomienie Timera który co 20 milisekund wykonuje główną pętlę gry
             gameTimer.Tick += delegate { GameLoopTimerEvent?.Invoke(this, EventArgs.Empty); };
             gameTimer.Interval = TimeSpan.FromMilliseconds(20);
@@ -146,6 +166,8 @@ namespace Space_Invaders_Project.Controllers
 
             // Przygotowanie kolejnego poziomu 
             _mapView.PrepareNextLevel(enemies);
+
+            _mapView.UpdateLevelLabel(level);
 
             // Wznowienie pętli gry
             gameTimer.Start();

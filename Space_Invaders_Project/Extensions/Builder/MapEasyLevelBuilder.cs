@@ -17,9 +17,10 @@ namespace Space_Invaders_Project.Extensions.Builder
         {
             Random random = new Random();
             int enemyXposition = 0;
-            enemyNumber+=level*2;
-            if(enemyNumber>35)
-                enemyNumber=35;
+            if(level %2 == 0)
+                enemyNumber+=1;
+            if(enemyNumber>15)
+                enemyNumber=15;
             for(int i=0; i<enemyNumber;i++)
             {
                 if(Drawing(basicChances+level,random))
@@ -34,7 +35,6 @@ namespace Space_Invaders_Project.Extensions.Builder
             return enemies;
         }
 
-        // Utworzenie danej ilości barier i ustawienie ich pozycji
         public List<DefenceBarrier> GetBarrier()
         {
             for(int i=0; i<3; i++)

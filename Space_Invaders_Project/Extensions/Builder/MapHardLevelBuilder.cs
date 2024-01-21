@@ -11,15 +11,15 @@ namespace Space_Invaders_Project.Extensions.Builder
          private Player player;
          private List<IEnemy> enemies = new List<IEnemy>();
          List<DefenceBarrier> barriers = new List<DefenceBarrier>();
-         private int enemyNumber =19;
+         private int enemyNumber =10;
          private int basicChances = 40;
         public List<IEnemy> CreateEnemies(int level)
         {
             Random random = new Random();
             int enemyXposition = 0;
-            enemyNumber +=level*5;
-            if(enemyNumber>50)
-                enemyNumber=50;
+            enemyNumber +=2;
+            if(enemyNumber>25)
+                enemyNumber=25;
             for(int i=0; i<enemyNumber;i++)
             {
                 if(Drawing(basicChances+(level*3),random))

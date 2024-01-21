@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using System.Windows.Media.Imaging;
 
 namespace Space_Invaders_Project.Models
 {
@@ -9,19 +11,33 @@ namespace Space_Invaders_Project.Models
     {
         private Point position;
         private int health; // wartości 0,1,2,3, gdzie 0 to brak bariery
-        private ImageBrush model;
+        private ImageBrush skin;
+        private Rectangle model;
+        private Rect hitbox;
 
         public DefenceBarrier()
         {
-            health = 3;
+            health = 2;
             MapHealthToModel();
         }
 
 
         // Metoda ustawiająca pozycję bariery
-        public void setPosition(Point position)
+        public void setPosition(int x, int y)
         {
-            this.position = position;
+            position = new Point(x,y);
+            hitbox = new Rect(position.X, position.Y, model.Width, model.Height);
+        }
+        public void setHealth()
+        {
+            health-=1;
+        }
+
+        public bool isDead()
+        {
+            if(health==0)
+                return true;
+            return false;
         }
 
 
@@ -32,17 +48,20 @@ namespace Space_Invaders_Project.Models
             {
                 case 1:
                     {
-                        model = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/barrier_red.png")) };
+                        skin = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/barrier_red.png")) };
+                        model = new Rectangle { Tag = "barrier", Fill = this.skin, Height = 35, Width = 150, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
                         break;
                     }
                 case 2:
                     {
-                        model = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/barrier_orange.png")) };
+                        skin = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/barrier_orange.png")) };
+                        model = new Rectangle { Tag = "barrier", Fill = this.skin, Height = 35, Width = 150, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
                         break;
                     }
                 case 3:
                     {
-                        model = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/barrier_green.png")) };
+                        skin = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/barrier_green.png")) };
+                        model = new Rectangle { Tag = "barrier", Fill = this.skin, Height = 35, Width = 150, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
                         break;
                     }
                 default:
@@ -59,9 +78,21 @@ namespace Space_Invaders_Project.Models
         {
             get {return health;}
         }
-        public Point Position
-        {
+        public Rect Hitbox 
+        { 
+            get { return hitbox; }
+        }
+        public Rectangle Model 
+        { 
+            get { return model; }
+        }
+        public Point Position 
+        { 
             get { return position; }
         }
+        public ImageBrush Skin 
+        { 
+            get { return skin; }
+        }       
     }
 }

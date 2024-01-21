@@ -36,7 +36,7 @@ namespace Space_Invaders_Project.Models
         // Metoda ustawiająca defaultowe wartości gracza
         public void SetDefaultStats()
         {
-            health = 3;
+            health = 30;
             damage = 10;
             attackSpeed = 2;
             scoreMultiplier = 1;
@@ -68,9 +68,16 @@ namespace Space_Invaders_Project.Models
 
 
         // Metoda dodająca bonus graczowi
-        public void addBonus()
+        public void addBonus(Player_Bonus bonus)
         {
             bonus.admitBonus(this);
+            //bonus.Notify();
+        }
+
+        //Metoda konczaca bonus
+         public void stopBonus(Player_Bonus endBonus)
+        {
+            endBonus.EndBonus(this);
         }
 
 
@@ -82,9 +89,10 @@ namespace Space_Invaders_Project.Models
 
 
         // Metoda ustawijąca bonus
-        public void setBonusStrategy(Player_Bonus strategy)
+        public Player_Bonus setBonusStrategy(Player_Bonus strategy)
         {
             bonus = strategy;
+            return bonus;
         }
 
 
