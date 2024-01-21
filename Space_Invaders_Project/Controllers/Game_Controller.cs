@@ -51,8 +51,8 @@ namespace Space_Invaders_Project.Controllers
             game.GameLoopTimerEvent += GameLoop;
 
             // Dodanie obsługi wciśnięcia przycisków na klawiaturze
-            mapView.KeyDownEvent += HandleKeyDownEvent;
-            mapView.KeyUpEvent += HandleKeyUpEvent;
+            _mapView.KeyDownEvent += HandleKeyDownEvent;
+            _mapView.KeyUpEvent += HandleKeyUpEvent;
 
             // Dodanie timera do odliczania czasu między kolejnymi strzałami przeciwników
             bulletTimer = new DispatcherTimer();
@@ -160,6 +160,8 @@ namespace Space_Invaders_Project.Controllers
                 bulletTimer.Tick -= RandomEnemyShotMissle;
                 bonusTimer.Stop();
                 bonusTimer.Tick -=  GenerateRandomBonus;
+                _mapView.KeyDownEvent -= HandleKeyDownEvent;
+                _mapView.KeyUpEvent -= HandleKeyUpEvent;
                 gameFacade.GameOver();
             }
         }

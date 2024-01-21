@@ -8,24 +8,19 @@
     "net7.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\msoko\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\szymo\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\msoko\\OneDrive\\Pulpit\\ZTP invaders\\Space_Invaders_Project\\Space_Invaders_Project\\Space_Invaders_Project.csproj",
+      "projectUniqueName": "C:\\Users\\szymo\\Desktop\\Programowanie\\Sem5\\ZTP\\Projekt\\Space_Invaders_Project\\Space_Invaders_Project.csproj",
       "projectName": "Space_Invaders_Project",
-      "projectPath": "C:\\Users\\msoko\\OneDrive\\Pulpit\\ZTP invaders\\Space_Invaders_Project\\Space_Invaders_Project\\Space_Invaders_Project.csproj",
-      "packagesPath": "C:\\Users\\msoko\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\msoko\\OneDrive\\Pulpit\\ZTP invaders\\Space_Invaders_Project\\Space_Invaders_Project\\obj\\",
+      "projectPath": "C:\\Users\\szymo\\Desktop\\Programowanie\\Sem5\\ZTP\\Projekt\\Space_Invaders_Project\\Space_Invaders_Project.csproj",
+      "packagesPath": "C:\\Users\\szymo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\szymo\\Desktop\\Programowanie\\Sem5\\ZTP\\Projekt\\Space_Invaders_Project\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\msoko\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\szymo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -69,7 +64,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   }
