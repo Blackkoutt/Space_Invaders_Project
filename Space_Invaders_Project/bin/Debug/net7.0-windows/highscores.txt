@@ -1,4 +1,5 @@
 //"nick score"
+aaaa 21
 llll 19
 llll 18
 llll 17
@@ -8,4 +9,3 @@ llll 14
 llll 13
 ffff 12
 llll 12
-jjj 11

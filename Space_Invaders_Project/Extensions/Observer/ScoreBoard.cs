@@ -1,39 +1,39 @@
 ﻿using System.Collections.Generic;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Space_Invaders_Project.Extensions.Observer
 {
     public class ScoreBoard : ISubscriber
     {
-        private List<string> nicks;
-        private List<int> scores;
+        private List<string> nicksTemp;
+        private List<int> scoresTemp;
+        private List<string> nicksDefault;
+        private List<int> scoresDefault;
         public ScoreBoard(List<string> nicks, List<int> scores) 
         {
-            this.nicks = nicks.GetRange(0, nicks.Count);//nicks;
-            this.scores = scores.GetRange(0, scores.Count);//scores;
+            this.nicksTemp = nicks.GetRange(0, nicks.Count); //nicks;
+            this.scoresTemp = scores.GetRange(0, scores.Count); //scores;
+            this.nicksDefault = nicks.GetRange(0, nicks.Count); //nicks;
+            this.scoresDefault = scores.GetRange(0, scores.Count); //scores;
         } 
 
 
         // Metoda aktualizująca tablicę wyników w czasie rzeczywistym 
         public void Update(string name, int score, int position)
         {
-            nicks.Insert(position, name);
-            scores.Insert(position, score);
-            if(nicks.Count > 10)
+            for (int i = 8; i >= position; i--)
             {
-                nicks.RemoveAt(nicks.Count-1);
-                scores.RemoveAt(scores.Count - 1);
+                nicksTemp[i + 1] = nicksDefault[i];
+                scoresTemp[i + 1] = scoresDefault[i];
             }
-            List<string> aa = nicks;
-            int b = 1;
+            nicksTemp[position] = name;
+            scoresTemp[position] = score;
         }
 
         public void UpdateRealHighScores(ref List<string> nicks, ref List<int> scores)
         {
-            nicks = this.nicks;
-            scores = this.scores;
-            //nicks = this.nicks.GetRange(0, this.nicks.Count);//new List<string>(this.nicks);
-            //this.nicks;
-            //scores = this.scores.GetRange(0, this.scores.Count);//new List<int>(this.scores);
+            nicks = this.nicksTemp;
+            scores = this.scoresTemp;
         }
     }
 }

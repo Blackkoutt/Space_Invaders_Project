@@ -159,7 +159,7 @@ namespace Space_Invaders_Project.Views
             canvas.Background = new SolidColorBrush(Colors.Transparent);
 
             CreateDefaultLabel("game_over", 65, 500, 50, "Game Over!", 200, Brushes.YellowGreen);
-            CreateDefaultLabel("score", 45, 210, 25, $"Score: {score}", 120, Brushes.YellowGreen);
+            CreateDefaultLabel("score", 45, 250, 25, $"Score: {score}", 120, Brushes.YellowGreen);
 
             Button playAgainButton = CreateButton(width / 2, height / 2 - 10, "Play Again!");
             Button returnToMenuButton = CreateButton(width / 2, height / 2 + 180, "Return");

@@ -134,7 +134,7 @@ namespace Space_Invaders_Project.Views
             canvas.Children.Add(scoreLabel);
 
             Label healthLabel = CreateLabel($"Health: {3}", "Health");
-            Canvas.SetRight(healthLabel, 0);
+            Canvas.SetRight(healthLabel, 20);
             Canvas.SetTop(healthLabel, 0);
             canvas.Children.Add(healthLabel);
 
