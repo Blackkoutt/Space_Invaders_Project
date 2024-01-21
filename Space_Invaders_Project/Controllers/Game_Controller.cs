@@ -24,8 +24,8 @@ namespace Space_Invaders_Project.Controllers
         private List<DefenceBarrier> barriers;
         private List<IMissile> missiles;
         private List<Player_Bonus> bonuses;
-        private List<Player_Bonus> activeBonuses = new List<Player_Bonus>();
-        private List<Player_Bonus> bonusesToRemove = new List<Player_Bonus>();
+        private List<Player_Bonus> activeBonuses ;
+        private List<Player_Bonus> bonusesToRemove ;
         
         private string playerMoveDirection = "";
         private string enemyMoveDirection = "right";
@@ -44,6 +44,8 @@ namespace Space_Invaders_Project.Controllers
 
             missiles = new List<IMissile>();
             bonuses = new List<Player_Bonus>();
+            bonusesToRemove = new List<Player_Bonus>();
+            activeBonuses = new List<Player_Bonus>();
 
             // Dodanie obsługi eventu timera gameTimer z Fasady
             game.GameLoopTimerEvent += GameLoop;
@@ -116,11 +118,13 @@ namespace Space_Invaders_Project.Controllers
                 {
                     _mapView.drawPauseOverlay();
                     bulletTimer.Stop();
+                    bonusTimer.Stop();
                 }
                 else
                 {
                     _mapView.erasePauseOverlay();
                     bulletTimer.Start();
+                    bonusTimer.Start();
                 }
                     
             }
@@ -211,11 +215,11 @@ namespace Space_Invaders_Project.Controllers
         {
             if (playerMoveDirection == "right" && player.Position.X + 75 < _mapView.getCanvas().Width)
             {
-                player.setPosition((int)player.Position.X + 10, (int)player.Position.Y);
+                player.setPosition((int)player.Position.X + player.MovementSpeed, (int)player.Position.Y);
             }
             else if (playerMoveDirection == "left" && player.Position.X > 0)
             {
-                player.setPosition((int)player.Position.X - 10, (int)player.Position.Y);
+                player.setPosition((int)player.Position.X - player.MovementSpeed, (int)player.Position.Y);
             }
         }
 
@@ -370,12 +374,12 @@ namespace Space_Invaders_Project.Controllers
                     if (missile is Player_Missile && missile.Hitbox.IntersectsWith(bonus.Hitbox))
                     {
                         player.addBonus(bonus);
-                        bonus.Notify();
                         activeBonuses.Add(bonus);
                         missiles.Remove(missile);
                         _mapView.RemoveEntity(missile.Model);
                         bonuses.Remove(bonus);
                         _mapView.RemoveEntity(bonus.Model);
+                        _mapView.UpdateBonusLabel(bonus.Name());
                         break;
                     }
                 }                      
@@ -453,11 +457,10 @@ namespace Space_Invaders_Project.Controllers
 
             if (chance < 5)
             {
-            int x = random.Next((int)_mapView.getCanvas().Width);
-            int minY = 250; 
-            int maxY = (int)_mapView.getCanvas().Height;
-            int y = random.Next(minY, maxY);
-
+            int x = random.Next((int)_mapView.getCanvas().Width-500);
+            int maxY = 400; 
+            int minY = (int)_mapView.getCanvas().Height;
+            int y = random.Next((int)_mapView.getCanvas().Height - 200);
             Point position = new Point(x, y);
             int bonusIndex = random.Next(1, 5);
             Player_Bonus bonus ;
@@ -468,22 +471,17 @@ namespace Space_Invaders_Project.Controllers
                     bonus = player.setBonusStrategy(new DamageDealtBonus(position));
                     bonuses.Add(bonus);
                     _mapView.SpawnBonusModel(bonus.Model, bonus.Position);
-                    break;
+                    break;              
                 case 2:
-                    bonus = player.setBonusStrategy(new FastAttackSpeedBonus(position));
-                    bonuses.Add(bonus);
-                    _mapView.SpawnBonusModel(bonus.Model, bonus.Position);
-                    break;
-                case 3:
                     bonus = player.setBonusStrategy(new FastMissleBonus(position));
                     bonuses.Add(bonus);
                     _mapView.SpawnBonusModel(bonus.Model, bonus.Position);
                     break;
-               /* case 4:
+                case 3:
                     bonus = player.setBonusStrategy(new MovementSpeedBonus(position));
                     bonuses.Add(bonus);
                      _mapView.SpawnBonusModel(bonus.Model, bonus.Position);
-                    break; */
+                    break; 
                 case 4:
                     bonus = player.setBonusStrategy(new ScoreMultiplier(position));
                     bonuses.Add(bonus);
@@ -497,10 +495,11 @@ namespace Space_Invaders_Project.Controllers
         private void IsBonuActive(){
             foreach (Player_Bonus bonus in activeBonuses.ToList())
         {
-            if (!(bonus.IsActive()))
+            if (bonus.IsActive())
             {
                 player.stopBonus(bonus);
                 activeBonuses.Remove(bonus);
+                _mapView.UpdateBonusLabel(" ");
             }
         }
         }
@@ -512,6 +511,7 @@ namespace Space_Invaders_Project.Controllers
             CheckIfNotificationToRemove();
             _mapView.UpdateScoreLabel(player.Score);
             _mapView.UpdateHealthLabel(player.Health);
+            
         }
 
 

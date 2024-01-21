@@ -9,5 +9,6 @@ namespace Space_Invaders_Project.Extensions.Builder
     {
         List<IEnemy> CreateEnemies(int level);
         List<DefenceBarrier> GetBarrier();
+        
     }
 }

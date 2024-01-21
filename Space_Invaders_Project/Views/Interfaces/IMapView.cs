@@ -31,5 +31,6 @@ namespace Space_Invaders_Project.Views.Interfaces
         void UpdateScoreLabel(int score);
         void UpdateHealthLabel(int health);
         void UpdateLevelLabel(int level);
+        void UpdateBonusLabel(string bonus);
     }
 }

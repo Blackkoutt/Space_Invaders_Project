@@ -8,7 +8,6 @@ namespace Space_Invaders_Project.Extensions.Builder
 {
     public class MapMediumLevelBuilder : MapBuilder
     {
-         private Player player;
          List<DefenceBarrier> barriers = new List<DefenceBarrier>();
          private List<IEnemy> enemies = new List<IEnemy>();
          private int enemyNumber =6;

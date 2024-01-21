@@ -10,31 +10,25 @@ namespace Space_Invaders_Project.Extensions.Strategy
 {
     public class FastMissleBonus : Player_Bonus
     {
-        private IMapView _mapView;
+
+        private string name; 
         public FastMissleBonus(Point position)  : base(position) 
         { 
-            
+            name="Szybkosc atakow";
         }    
         public override void admitBonus(Player player)
         {
             player.AttackVelocity = 12;
+            Console.WriteLine("szybkie ataki");
         }
         public override void EndBonus(Player player)
         {
            player.AttackVelocity = 6;
         }
-        public override void Notify()
+        public override string Name ()
         {
-            string message = String.Format("Przyznano bonus do szybkości pocisków");
-             Label label = new Label()
-                {
-                    Tag = "notification",
-                    Content = message,
-                    Background = Brushes.DarkGray,
-                    Opacity = 0.4
-                };
-                _mapView.AddNotification(label);
-            
-        }
+            return name;
+        }  
+
     }
 }

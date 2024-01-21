@@ -62,11 +62,11 @@ namespace Space_Invaders_Project.Controllers
             {
                 if(barriers.Count==1)
                 {
-                    barriers[0].setPosition((int)(windowSize.Width/2-(barriers[0].Model.Width/2)), (int)windowSize.Height -250 );
+                    barriers[0].setPosition((int)(windowSize.Width/2-(barriers[0].Model.Width/2)), (int)windowSize.Height -200 );
                 }else{
-                    barriers[0].setPosition((int)0, (int)windowSize.Height -250 );
-                    barriers[1].setPosition((int)(windowSize.Width/2-barriers[2].Model.Width/2), (int)windowSize.Height -250 );
-                    barriers[2].setPosition((int)(windowSize.Width-barriers[2].Model.Width), (int)windowSize.Height -250 );
+                    barriers[0].setPosition((int)0, (int)windowSize.Height -200 );
+                    barriers[1].setPosition((int)(windowSize.Width/2-barriers[2].Model.Width/2), (int)windowSize.Height -200 );
+                    barriers[2].setPosition((int)(windowSize.Width-barriers[2].Model.Width), (int)windowSize.Height -200 );
                 }
 
             }
@@ -164,10 +164,9 @@ namespace Space_Invaders_Project.Controllers
             List<IEnemy> enemies = builder.CreateEnemies(++level);
             gc.Enemies = enemies;
 
-            // Przygotowanie kolejnego poziomu 
-            _mapView.PrepareNextLevel(enemies);
-
             _mapView.UpdateLevelLabel(level);
+            // Przygotowanie kolejnego poziomu 
+            _mapView.PrepareNextLevel(enemies);           
 
             // Wznowienie pętli gry
             gameTimer.Start();

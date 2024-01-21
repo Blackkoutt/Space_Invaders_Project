@@ -8,18 +8,20 @@ namespace Space_Invaders_Project.Extensions.Builder
 {
     public class MapEasyLevelBuilder : MapBuilder
     {
-        private Player player;
-        private List<DefenceBarrier> barriers = new List<DefenceBarrier>();
-        private List<IEnemy> enemies = new List<IEnemy>();
-        private int enemyNumber = 5;
-        private int basicChances = 10;
+        private List<DefenceBarrier> barriers ;
+        private List<IEnemy> enemies;
+        private int enemyNumber ;
+        private int basicChances ;
         public List<IEnemy> CreateEnemies(int level)
         {
+            enemyNumber = 5;
+            basicChances = 10;
+            enemies = new List<IEnemy>();
             Random random = new Random();
             int enemyXposition = 0;
             if(level %2 == 0)
                 enemyNumber+=1;
-            if(enemyNumber>15)
+            if(enemyNumber>10)
                 enemyNumber=15;
             for(int i=0; i<enemyNumber;i++)
             {
@@ -37,6 +39,7 @@ namespace Space_Invaders_Project.Extensions.Builder
 
         public List<DefenceBarrier> GetBarrier()
         {
+            barriers = new List<DefenceBarrier>();
             for(int i=0; i<3; i++)
             {
                 barriers.Add(new DefenceBarrier());  

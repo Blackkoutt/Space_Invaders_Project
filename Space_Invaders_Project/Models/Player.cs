@@ -15,7 +15,7 @@ namespace Space_Invaders_Project.Models
         private float attackSpeed;
         private int scoreMultiplier;
         private float attackVelocity;
-        private float movementSpeed;
+        private int movementSpeed;
         private ImageBrush skin;
         private Rectangle model;
         private Rect hitbox;
@@ -38,6 +38,7 @@ namespace Space_Invaders_Project.Models
         {
             health = 30;
             damage = 10;
+            movementSpeed = 10;
             attackSpeed = 2;
             scoreMultiplier = 1;
             attackSpeed = 1.0f;
@@ -71,7 +72,7 @@ namespace Space_Invaders_Project.Models
         public void addBonus(Player_Bonus bonus)
         {
             bonus.admitBonus(this);
-            //bonus.Notify();
+            bonus.setTime();         
         }
 
         //Metoda konczaca bonus
@@ -86,8 +87,6 @@ namespace Space_Invaders_Project.Models
         {
             return new Player_Missile(new Point((position.X + model.Width / 2) - 2, position.Y), attackVelocity, damage);
         }
-
-
         // Metoda ustawijąca bonus
         public Player_Bonus setBonusStrategy(Player_Bonus strategy)
         {
@@ -144,7 +143,7 @@ namespace Space_Invaders_Project.Models
             get { return attackVelocity; }
             set { attackVelocity = value; }
         }
-        public float MovementSpeed
+        public int MovementSpeed
         {
             get { return movementSpeed; }
             set { movementSpeed = value; }

@@ -7,12 +7,18 @@ namespace Space_Invaders_Project.Extensions.Observer
 {
     public class HighScores
     {
-        private List<string> nicksList = new List<string>();
-        private List<int> scoresList = new List<int>(); 
-        private List<ISubscriber> subscribers = new List<ISubscriber>();
+        private List<string> nicksList ;
+        private List<int> scoresList ; 
+        private List<ISubscriber> subscribers;
         private string nick = "test2";
 
-        public HighScores() { } 
+        public HighScores() {
+            nicksList = new List<string>();
+            scoresList = new List<int>(); 
+            subscribers = new List<ISubscriber>();
+            nick = "test2";
+
+         } 
 
 
         // Metoda zapisująca tablice wyników do pliku

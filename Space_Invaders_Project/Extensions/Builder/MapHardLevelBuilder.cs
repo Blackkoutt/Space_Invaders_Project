@@ -8,7 +8,6 @@ namespace Space_Invaders_Project.Extensions.Builder
 {
     public class MapHardLevelBuilder : MapBuilder
     {
-         private Player player;
          private List<IEnemy> enemies = new List<IEnemy>();
          List<DefenceBarrier> barriers = new List<DefenceBarrier>();
          private int enemyNumber =10;
@@ -18,8 +17,8 @@ namespace Space_Invaders_Project.Extensions.Builder
             Random random = new Random();
             int enemyXposition = 0;
             enemyNumber +=2;
-            if(enemyNumber>25)
-                enemyNumber=25;
+            if(enemyNumber>18)
+                enemyNumber=18;
             for(int i=0; i<enemyNumber;i++)
             {
                 if(Drawing(basicChances+(level*3),random))

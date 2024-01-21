@@ -11,9 +11,10 @@ namespace Space_Invaders_Project.Extensions.Strategy
     public class DamageDealtBonus : Player_Bonus
     {
         private IMapView _mapView;
+        private string name; 
         public DamageDealtBonus(Point position) : base(position) 
         { 
-            
+            name="Zwiekszone obrazenia";
         }    
         public override void admitBonus(Player player)
         {
@@ -23,18 +24,10 @@ namespace Space_Invaders_Project.Extensions.Strategy
         {
             player.Damage = 10;
         }
-        public override void Notify()
+        public override string Name ()
         {
-            string message =  String.Format("Przyznano bonus do obrazeń");
-             Label label = new Label()
-                {
-                    Tag = "notification",
-                    Content = message,
-                    Background = Brushes.DarkGray,
-                    Opacity = 0.4
-                };
-                _mapView.AddNotification(label);
+            return name;
+        }   
 
-        }
     }
 }

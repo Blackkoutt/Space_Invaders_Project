@@ -82,6 +82,17 @@ namespace Space_Invaders_Project.Views
                 }
             }
         }
+        public void UpdateBonusLabel(string bonusName)
+        {
+            foreach (Label label in canvas.Children.OfType<Label>()) 
+            {
+                if (label.Tag.ToString() == "Bonus")
+                {
+                    label.Content = "Bonus: " + bonusName;
+                    return;
+                }
+            }
+        }
 
 
         // Getter do Canvasu
@@ -127,9 +138,15 @@ namespace Space_Invaders_Project.Views
             Canvas.SetTop(healthLabel, 0);
             canvas.Children.Add(healthLabel);
 
-            Label levelLabel = CreateLabel($"Level: {1}", "HLevel");
+            Label levelLabel = CreateLabel($"Level: {1}", "Level");
+            Canvas.SetLeft(levelLabel, 450);
             Canvas.SetTop(levelLabel, 0);
             canvas.Children.Add(levelLabel);
+
+            Label bonusLabel = CreateLabel($"Bonus: ", "Bonus");
+            Canvas.SetLeft(bonusLabel, 0);
+            Canvas.SetTop(bonusLabel, 30);
+            canvas.Children.Add(bonusLabel);
 
             // Narysuj gracza
             DrawEntity(player.Model, player.Position);
@@ -165,14 +182,23 @@ namespace Space_Invaders_Project.Views
             Canvas.SetTop(scoreLabel, 0);
             canvas.Children.Add(scoreLabel);
 
+            //Narysuj label z życiem
             Label healthLabel = CreateLabel($"Health: {3}", "Health");
-            Canvas.SetRight(healthLabel, 0);
+            Canvas.SetRight(healthLabel, 20);
             Canvas.SetTop(healthLabel, 0);
             canvas.Children.Add(healthLabel);
 
-            Label levelLabel = CreateLabel($"Level: {1}", "HLevel");
+            //Narysuj labale z levelem
+
+            Label levelLabel = CreateLabel($"Level: {1}", "Level");
+            Canvas.SetLeft(levelLabel, 450);
             Canvas.SetTop(levelLabel, 0);
             canvas.Children.Add(levelLabel);
+
+            Label bonusLabel = CreateLabel($"Bonus:  ", "Bonus");
+            Canvas.SetLeft(bonusLabel, 0);
+            Canvas.SetTop(bonusLabel, 30);
+            canvas.Children.Add(bonusLabel);
 
             // Narysuj gracza
             DrawEntity(player.Model, player.Position);

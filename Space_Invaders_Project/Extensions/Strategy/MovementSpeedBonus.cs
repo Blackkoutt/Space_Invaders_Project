@@ -10,32 +10,25 @@ namespace Space_Invaders_Project.Extensions.Strategy
 {
     public class MovementSpeedBonus : Player_Bonus
     {
-        private IMapView _mapView;
+
+        private string name; 
         public MovementSpeedBonus(Point position) : base(position) 
         { 
-            
+            name="Predkosc ruchow";
         }    
         public override void admitBonus(Player player)
         {
-            player.MovementSpeed = 1.3f;
+            player.MovementSpeed = 15;
         }
 
         public override void EndBonus(Player player)
         {
-            throw new System.NotImplementedException();
+            player.MovementSpeed = 10;
         }
-        public override void Notify()
+        public override string Name ()
         {
-            string message = String.Format("Przyznano bonus do prędkości poruszania");
-             Label label = new Label()
-                {
-                    Tag = "notification",
-                    Content = message,
-                    Background = Brushes.DarkGray,
-                    Opacity = 0.4
-                };
-                _mapView.AddNotification(label);
-            
+            return name;
         }
+
     }
 }

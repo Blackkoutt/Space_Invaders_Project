@@ -10,10 +10,11 @@ namespace Space_Invaders_Project.Extensions.Strategy
 {
     public class ScoreMultiplier : Player_Bonus
     {
-        private IMapView _mapView;
+  
+        private string name;  
         public ScoreMultiplier(Point position) : base(position) 
         { 
-
+            name="Mnoznik punktow";
         }    
         public override void admitBonus(Player player)
         {
@@ -22,19 +23,10 @@ namespace Space_Invaders_Project.Extensions.Strategy
         public override void EndBonus(Player player)
         {
            player.ScoreMultiplier = 1; 
-        }
-        public override void Notify()
+        }  
+        public override string Name ()
         {
-            string message = String.Format("Przyznano bonus do mnożnika punktów");
-             Label label = new Label()
-                {
-                    Tag = "notification",
-                    Content = message,
-                    Background = Brushes.DarkGray,
-                    Opacity = 0.4
-                };
-                _mapView.AddNotification(label);
-            
+            return name;
         }
 
     }
