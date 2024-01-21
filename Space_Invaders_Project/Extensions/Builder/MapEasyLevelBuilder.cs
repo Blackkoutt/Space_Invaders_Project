@@ -10,12 +10,10 @@ namespace Space_Invaders_Project.Extensions.Builder
     {
         private List<DefenceBarrier> barriers ;
         private List<IEnemy> enemies;
-        private int enemyNumber ;
-        private int basicChances ;
+        private int enemyNumber = 5;
+        private int basicChances = 10 ;
         public List<IEnemy> CreateEnemies(int level)
-        {
-            enemyNumber = 5;
-            basicChances = 10;
+        {    
             enemies = new List<IEnemy>();
             Random random = new Random();
             int enemyXposition = 0;

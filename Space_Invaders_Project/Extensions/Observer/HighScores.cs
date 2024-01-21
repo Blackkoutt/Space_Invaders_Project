@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Space_Invaders_Project.Extensions.Observer
 {
@@ -97,7 +98,7 @@ namespace Space_Invaders_Project.Extensions.Observer
                 {
                     foreach (ISubscriber subscriber in subscribers)
                     {
-                        subscriber.Update(nick, score, i, ref nicksList, ref scoresList);
+                        subscriber.Update(nick, score, i);
                     }
                     break;
                 }
@@ -114,7 +115,7 @@ namespace Space_Invaders_Project.Extensions.Observer
 
         // Metoda usuwająca subskrybenta
         public void RemoveSubscriber(ISubscriber s)
-        {
+        {              
             subscribers.Remove(s);
         }
 
@@ -122,6 +123,10 @@ namespace Space_Invaders_Project.Extensions.Observer
         // Metoda usuwająca wszytskich subskrybentów
         public void RemoveAllSubscribers()
         {
+            foreach (ISubscriber subscriber in subscribers)
+            {
+                subscriber.UpdateRealHighScores(ref nicksList, ref scoresList);
+            }
             subscribers.Clear();
         }
 

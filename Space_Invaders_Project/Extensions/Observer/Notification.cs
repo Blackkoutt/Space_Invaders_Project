@@ -10,15 +10,19 @@ namespace Space_Invaders_Project.Extensions.Observer
     {
         private IMapView _mapView;
         private string lastNotification = "";
+        private List<string> nicks;
+        private List<int> scores;
 
-        public Notification(IMapView mapView) 
+        public Notification(IMapView mapView, List<string> nicks, List<int> scores) 
         {
             _mapView = mapView;
+            this.nicks = nicks;
+            this.scores = scores;
         }
 
         
         // Metoda tworząca powiadomienie o pobiciu wyniku danego gracza
-        public void Update(string name, int score,int position, ref List<string> nicks, ref List<int> scores)
+        public void Update(string name, int score,int position)
         {
             if(name != nicks[position])
             {
@@ -36,6 +40,11 @@ namespace Space_Invaders_Project.Extensions.Observer
                 _mapView.AddNotification(label);
                 lastNotification = message;
             } 
+        }
+
+        public void UpdateRealHighScores(ref List<string> nicks, ref List<int> scores)
+        {
+            
         }
     }
 }

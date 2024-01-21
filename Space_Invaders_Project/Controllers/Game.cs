@@ -72,9 +72,9 @@ namespace Space_Invaders_Project.Controllers
             }
 
             // Dodanie konkretnych subskrybentów do Highscore
-            Notification notification = new Notification(_mapView);
+            Notification notification = new Notification(_mapView, highScores.NickList, highScores.ScoresList);
             highScores.AddSubscriber(notification);
-            ScoreBoard scoreBoard = new ScoreBoard();
+            ScoreBoard scoreBoard = new ScoreBoard(highScores.NickList, highScores.ScoresList);
             highScores.AddSubscriber(scoreBoard);
 
             //Dodanie listy bonusów ze strategii
